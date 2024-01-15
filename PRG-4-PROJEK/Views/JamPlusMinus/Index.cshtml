@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Halaman";
+}
+@{
+    var httpContext = ViewContext.HttpContext;
+}
+<style>
+    body {
+        background-size: 100%;
+        background-image: url("/content/images/IMG_Background2.jpg");
+    }
+</style>
+<body>
+        <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+                <h3 style="font-weight: bold;">
+                    Program studi <br>
+                    Teknik Rekayasa Logistik
+                </h3>
+                <br>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-lg-4 mb-4" style="padding: 0px 30px;">
+                <div class="card card-cascade wider wow fadeIn fast" style="visibility: visible; animation-name: fadeIn; animation-iteration-count: 1;">
+                    <div class="view view-cascade overlay">
+                        <img class="card-img-top" src="~/content/images/plus.png" alt="Jam Plus">
+                        <a href="https://www.polytechnic.astra.ac.id/teknologi-rekayasa-logistik/" target="_blank">
+                            <div class="mask rgba-white-slight waves-effect waves-light"></div>
+                        </a>
+                    </div>
+                    <div class="card-body card-body-cascade text-center">
+                        <h1 class="card-title"><strong>Jam Plus (+)</strong></h1>
+                        <p class="card-text" style="margin-bottom: 5px !important;">
+                            <h1 class="card-title"><strong>@httpContext.Session.GetString("JP")</strong></h1>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4" style="padding: 0px 30px;">
+                <div class="card card-cascade wider wow fadeIn fast" style="visibility: visible; animation-name: fadeIn; animation-iteration-count: 1;">
+                    <div class="view view-cascade overlay">
+                        <img class="card-img-top" src="~/content/images/minus.png" alt="Jam Minus">
+                        <a href="https://www.polytechnic.astra.ac.id/teknologi-rekayasa-logistik/" target="_blank">
+                            <div class="mask rgba-white-slight waves-effect waves-light"></div>
+                        </a>
+                    </div>
+                    <div class="card-body card-body-cascade text-center">
+                        <h1 class="card-title"><strong>Jam Minus (-)</strong></h1>
+                        <p class="card-text" style="margin-bottom: 5px !important;">
+                            <h1 class="card-title"><strong>@httpContext.Session.GetString("JM")</strong></h1>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+        
+  

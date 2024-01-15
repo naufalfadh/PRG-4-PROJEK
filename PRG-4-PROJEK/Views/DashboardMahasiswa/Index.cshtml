@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "_LayoutMahasiswa";
+    ViewData["Title"] = "Halaman";
+}
+
+<style>
+    body {
+        background-size: 100%;
+        background-image: url("/content/images/IMG_Background2.jpg");
+    }
+
+    /* Add additional styles for cards if needed */
+    .card {
+        margin: 20px;
+    }
+
+    .card-text {
+        font-size:20px;
+    }
+</style>
+
+<body>
+    @{
+        var httpContext = ViewContext.HttpContext;
+    }
+    <div class="container">
+        <div class="row">
+            <!-- Card 1 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jam Plus</h5>
+                        <p class="card-text"><strong>@httpContext.Session.GetString("JP") </strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Card 2</h5>
+                        <p class="card-text">Content for Card 2 goes here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Card 3</h5>
+                        <p class="card-text">Content for Card 3 goes here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

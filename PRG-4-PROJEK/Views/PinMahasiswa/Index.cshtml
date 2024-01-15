@@ -1,0 +1,194 @@
+﻿@model PRG_4_PROJEK.Models.MahasiswaModel
+@{
+    ViewData["Title"] = "Halaman";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Login Mahasiswa</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link href="~/content2/assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="~/content2/assets/css/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="~/content2/assets/css/templatemo-ebook-landing.css" rel="stylesheet">
+
+    <style>
+        #hidden-container {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .btnn {
+            width: 70px;
+            height: 70px;
+            margin: 8px;
+            margin-left : 12px;
+            font-size: 17px;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <main>
+     
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-lg-auto me-lg-4">
+                    </ul>
+                    <div class="d-none d-lg-block">
+                        <a class="nav-link collapsed" asp-controller="LoginMahasiswa" asp-action="Index">
+                            <div class="btn custom-btn custom-border-btn btn-naira btn-inverted">
+                                <i class="btn-icon bi bi-box-arrow-left"></i>
+                                <span>Kembali</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+               
+
+            </div>
+        </nav>
+
+
+        <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+            <div class="container">
+                <div class="row">
+                    @{
+                        var httpContext = ViewContext.HttpContext;
+                    }
+                    <div class="col-lg-6 col-12 mb-5 pb-5 pb-lg-0 mb-lg-0">
+                        <img src="~/content2/assets/images/Teknik Rekayasa logistik.png" class="hero-image img-fluid" alt="education online books">
+                    </div>  
+
+                    <div class="hero-image-wrap col-lg-6 col-12 mt-3 mt-lg-0">
+                       
+                        <h1 class="text-white mb-4">SELAMAT DATANG </h1>
+                        <div class="btn custom-btn custom-border-btn btn-naira btn-inverted">
+                            <i class="btn-icon bi bi-person"></i>
+                            <span>Hai,@httpContext.Session.GetString("Nama") </span>
+                        </div><br /><br />
+
+                        <form method="post" action="PinMahasiswa/PinMahasiswa">
+                            <div class="btn custom-btn custom-border-btn btn-naira btn-inverted">
+                                <input asp-for="pin" class="form-control form-control-lg border-left-0" type="pin" id="pinInput" placeholder="Masukkan PIN anda" required autofocus />
+                            </div>
+                            <div class="input-group-append">
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(1)">1</button>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(2)">2</button>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(3)">3</button><br>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(4)">4</button>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(5)">5</button>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(6)">6</button><br>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(7)">7</button>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(8)">8</button>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(9)">9</button><br>
+                                <button type="button" class="btnn btn-secondary" onclick="appendDigit(0)">0</button>
+                                <button type="submit" class="btnn btn-primary">OK</button>
+                                <button type="button" class="btnn btn-danger" onclick="deleteLastDigit()"><-</button>
+                            </div>
+                            <span asp-validation-for="pin" class="text-danger"></span>
+
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @TempData["ErrorMessage"]
+                                </div>
+                            }
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="featured-section">
+            <div class="container">
+                <div class="row">
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="py-lg-5"></section>
+
+
+    </main>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="~/content2/assets/js/jquery.min.js"></script>
+    <script src="~/content2/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/content2/assets/js/jquery.sticky.js"></script>
+    <script src="~/content2/assets/js/click-scroll.js"></script>
+    <script src="~/content2/assets/js/custom.js"></script>
+
+    <script>
+        function appendDigit(digit) {
+            var pinInput = document.getElementById('pinInput');
+            pinInput.value += digit;
+        }
+
+        function deleteLastDigit() {
+            var pinInput = document.getElementById('pinInput');
+            pinInput.value = pinInput.value.slice(0, -1);
+        }
+       
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            var rfidInput = document.getElementById("rfidInput");
+
+            rfidInput.focus();
+        });
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var day = now.getDate();
+            var month = now.getMonth() + 1;
+            var year = now.getFullYear();
+
+            document.getElementById('clock').innerHTML = addZero(hours) + ':' + addZero(minutes) + ':' + addZero(seconds);
+            document.getElementById('date').innerHTML = addZero(day) + '/' + addZero(month) + '/' + year;
+
+            setTimeout(updateClock, 1000);
+        }
+
+        function addZero(value) {
+            return value < 10 ? '0' + value : value;
+        }
+
+        updateClock(); // Call the function to display the clock initially
+    </script>
+</body>
+</html>

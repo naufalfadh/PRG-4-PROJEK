@@ -1,0 +1,109 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<PRG_4_PROJEK.Models.KegiatanModel>
+@{
+    ViewData["Title"] = "Kegiatan";
+    int no = 1;
+}
+
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Kegiatan</h5>
+                    <hr />
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="row">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle me-1"></i>
+                                <strong>Sukses!</strong> @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    }
+                    <a class="btn btn-primary" asp-action="Create">Tambah Kegiatan</a>
+                    <p></p>
+                    <table class="table datatable" id="myTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Deskripsi</th>
+                                <th scope="col">Kapasitas</th>
+                            </tr>
+                        </thead>
+                       <tbody>
+                            @foreach (var kegiatan in Model)
+                            {
+                                <tr>
+                                    <td>@(no++)</td>
+                                    <td>@kegiatan.id_kegiatan</td>
+                                    <td>@kegiatan.deskripsi</td>
+                                    <td>@kegiatan.kapasitas</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger delete-button" data-id="@kegiatan.id_kegiatan">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <a asp-controller="Kegiatan" asp-action="Edit" asp-route-id="@kegiatan.id_kegiatan" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+    $(document).ready(function () {
+        $(".delete-button").click(function () {
+            var akunId = $(this).data("id");
+
+            Swal.fire({
+                title: "Hapus kegiatan?",
+                text: "Apakah anda yakin ingin menghapus kegiatan ini?",
+                icon: "warning",
+                confirmButtonText: "Iya",
+                showDenyButton: true,
+                denyButtonText: "Tidak",
+                dangerMode: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/kegiatan/Delete/" + akunId, // Perbaiki URL dengan menambahkan tanda "/"
+                        type: "POST",
+                        success: function (data) {
+                            if (data.success) {
+                                Swal.fire("Sukses!", data.message, "success").then(() => {
+                                    // Refresh halaman setelah pengguna menekan tombol "OK"
+                                    location.reload();
+                                });
+                       d     } else {
+                                Swal.fire("Gagal!", data.message, "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error", "Terjadi kesalahan saat menghapus kegiatan.", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

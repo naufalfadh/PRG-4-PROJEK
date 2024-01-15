@@ -1,0 +1,72 @@
+﻿@model PRG_4_PROJEK.Models.MahasiswaModel
+
+@{
+    ViewData["Title"] = "Tambah Mahasiswa";
+}
+
+
+
+<body>
+  
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="pagetitle">
+                    <h1>Mahasiswa</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">Mahasiswa</li>
+                            <li class="breadcrumb-item active">Tambah Mahasiswa</li>
+                        </ol>
+                    </nav>
+                </div>
+                <form class="forms-sample" method="post">
+                    <div class="form-group mb-3" >
+                        <label asp-for="nim">NIM <span style="color: red;">*</span></label>
+                        <input asp-for="nim" type="text" class="form-control input-with-border" placeholder="Nomor Induk Mahasiswa">
+                        <span asp-validation-for="nim" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="nama">Nama <span style="color: red;">*</span></label>
+                        <input asp-for="nama" type="text" class="form-control input-with-border" placeholder="Nama Mahasiswa">
+                        <span asp-validation-for="nama" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="rfid">RFID <span style="color: red;">*</span></label>
+                        <input asp-for="rfid" type="number" class="form-control input-with-border" placeholder="Nomor RFID">
+                        <span asp-validation-for="rfid" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="pin">PIN <span style="color: red;">*</span></label>
+                        <input asp-for="pin" type="number" class="form-control input-with-border" placeholder="Masukkan PIN">
+                        <span asp-validation-for="pin" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="jk">Jenis Kelamin <span style="color: red;">*</span></label>
+                        <select asp-for="jk" class="form-control input-with-border">
+                            <option value="" disabled selected>Pilih Jenis kelamin</option>
+                            <option value="laki-laki">Laki-laki</option>
+                            <option value="perempuan">Perempuan</option>
+                        </select>
+                        <span asp-validation-for="jk" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input asp-for="jp" type="text" class="form-control input-with-border" value="0" hidden >
+                    </div>
+                    <div class="form-group mb-3">
+                        <input asp-for="jm" type="text" class="form-control input-with-border" value="0"hidden >
+                    </div>
+                    <div class="form-group mb-3">
+                        <input asp-for="softskil" type="text" class="form-control input-with-border"value="0" hidden>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input asp-for="status" type="text" class="form-control input-with-border" placeholder="Status" value="aktif" hidden>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                            <a asp-controller="Mahasiswa" asp-action="Index" class="btn btn-light">Kembali</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,82 @@
+﻿@model PRG_4_PROJEK.Models.KaryawanModel
+
+@{
+    ViewData["Title"] = "Tambah Akun";
+}
+
+
+
+<body>
+    <div class="pagetitle">
+        <h1>Akun</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Master Akun</li>
+                <li class="breadcrumb-item active">Tambah Akun</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tambah Akun</h4>
+                <form class="row g-3" method="post" >
+                    <div class="form-group mb-3">
+                        <label asp-for="npk">NPK <span style="color: red;">*</span></label>
+                        <input asp-for="npk" type="text" class="form-control input-with-border" placeholder="NPK">
+                        <span asp-validation-for="npk" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="nama">Nama <span style="color: red;">*</span></label>
+                        <input asp-for="nama" type="text" class="form-control input-with-border" placeholder="Masukkan Nama">
+                        <span asp-validation-for="nama" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="password">Password <span style="color: red;">*</span></label>
+                        <div class="input-group">
+                            <input asp-for="password" type="password" class="form-control input-with-border" placeholder="Password">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword(this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="jk">Jenis Kelamin <span style="color: red;">*</span></label>
+                        <select asp-for="jk" class="form-control input-with-border">
+                            <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                            <option value="laki-laki">Laki-Laki</option>
+                            <option value="perempuan">Perempuan</option>
+                        </select>
+                        <span asp-validation-for="jk" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="role">Role <span style="color: red;">*</span></label>
+                        <select asp-for="role" class="form-control input-with-border">
+                            <option value="" disabled selected>Pilih role</option>
+                            <option value="admin">admin</option>
+                            <option value="sekprod">sekprod</option>
+                        </select>
+                        <span asp-validation-for="role" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input asp-for="status" type="text" class="form-control input-with-border" placeholder="Status" value="aktif" hidden>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                            <a asp-controller="Akun" asp-action="Index" class="btn btn-light">Batal</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function togglePassword(button) {
+        var input = $(button).closest('.form-group').find('input');
+        var type = input.attr('type') === 'password' ? 'text' : 'password';
+        input.attr('type', type);
+        $(button).find('i').toggleClass('fa-eye fa-eye-slash');
+    }
+</script>
