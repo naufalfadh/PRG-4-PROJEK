@@ -120,8 +120,8 @@ namespace PRG_4_PROJEK.Models
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", karyawanModel.npk);
                 command.Parameters.AddWithValue("@p2", karyawanModel.nama);
-                command.Parameters.AddWithValue("@p3", karyawanModel.jk);
-                command.Parameters.AddWithValue("@p4", karyawanModel.password);
+                command.Parameters.AddWithValue("@p3", karyawanModel.password);
+                command.Parameters.AddWithValue("@p4", karyawanModel.jk);
                 command.Parameters.AddWithValue("@p5", karyawanModel.role);
                 command.Parameters.AddWithValue("@p6", karyawanModel.status);
                 _connection.Open();
@@ -140,8 +140,8 @@ namespace PRG_4_PROJEK.Models
             {
                 string query = "update karyawan " +
                 "set nama = @p2, " +
-                "jenis_kelamin = @p3, " +
-                "password = @p4, " +
+                "password = @p3, " +
+                "jenis_kelamin = @p4, " +
                 "role = @p5, " +
                 "status = @p6 " +
                 "where id_karyawan = @p1";
@@ -149,8 +149,8 @@ namespace PRG_4_PROJEK.Models
                 using SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", karyawanModel.npk);
                 command.Parameters.AddWithValue("@p2", karyawanModel.nama);
-                command.Parameters.AddWithValue("@p3", karyawanModel.jk);
-                command.Parameters.AddWithValue("@p4", karyawanModel.password);
+                command.Parameters.AddWithValue("@p3", karyawanModel.password);
+                command.Parameters.AddWithValue("@p4", karyawanModel.jk);
                 command.Parameters.AddWithValue("@p5", karyawanModel.role);
                 command.Parameters.AddWithValue("@p6", karyawanModel.status);
                 _connection.Open();
@@ -163,11 +163,11 @@ namespace PRG_4_PROJEK.Models
             }
         }
 
-        public void tidakAktif(string id)
+        public void deleteData(int id)
         {
             try
             {
-                string query = "update karyawan set status='tidak aktif' where id_karyawan = @p1";
+                string query = "delete from karyawan where id_karyawan = @p1";
                 using SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", id);
                 _connection.Open();
@@ -180,20 +180,28 @@ namespace PRG_4_PROJEK.Models
             }
         }
 
-        public void aktif(string id)
+
+        public bool IsNPKAlreadyExists(string npk)
         {
             try
             {
-                string query = "update karyawan set status='aktif' where id_karyawan = @p1";
-                using SqlCommand command = new SqlCommand(query, _connection);
-                command.Parameters.AddWithValue("@p1", id);
+                string query = "SELECT COUNT(*) FROM karyawan WHERE id_karyawan = @p1";
+                SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", npk);
                 _connection.Open();
-                command.ExecuteNonQuery();
-                _connection.Close();
+
+                int count = (int)command.ExecuteScalar();
+
+                return count > 0;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                _connection.Close();
             }
         }
     } 

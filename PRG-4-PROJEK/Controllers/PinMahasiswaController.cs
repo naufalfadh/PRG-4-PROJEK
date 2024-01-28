@@ -33,9 +33,9 @@ namespace PRG_4_PROJEK.Controllers
 
 
         [HttpPost]
-        public IActionResult PinMahasiswa(string pin)
+        public IActionResult PinMahasiswa(string rfid, string pin)
         {
-            MahasiswaModel mahasiswaModel = _mahasiswaRepository.getDataByPassword(pin);
+            MahasiswaModel mahasiswaModel = _mahasiswaRepository.getDataByPassword(rfid, pin);
 
             if (mahasiswaModel == null)
             {
@@ -46,6 +46,7 @@ namespace PRG_4_PROJEK.Controllers
 
             string serializedModel = JsonConvert.SerializeObject(mahasiswaModel);
             HttpContext.Session.SetString("Identity", serializedModel);
+            HttpContext.Session.SetString("rfid", mahasiswaModel.rfid);
             HttpContext.Session.SetString("Id", mahasiswaModel.pin);
             HttpContext.Session.SetString("Nama", mahasiswaModel.nama);
             HttpContext.Session.SetString("JP", mahasiswaModel.jp.ToString()); // Convert to string

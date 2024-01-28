@@ -45,7 +45,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
 
-</head>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Indonesian.json"></script>
 <style>
 .custom-h10 {
     font-size: 12px; /* Atur ukuran font sesuai keinginan Anda */
@@ -55,37 +55,47 @@
     .custom-logout-btn {
         color: red !important;
     }
-</style>
+     .nav-link span {
+        font-size: 18px; /* Adjust the font size as needed */
+    }
+     .header .logo span {
+        font-size: 18px; /* Adjust the font size as needed */
+    }
+
+    .header .dropdown-toggle {
+        font-size: 18px; /* Adjust the font size as needed */
+    }
+</style
+</head>>
 
 
 <body>
 
     <!-- ======= Header ======= -->
-    <header id="header" class="header fixed-top d-flex align-items-center">
-        @{
-            var httpContext = ViewContext.HttpContext;
-        }
-        <div class="d-flex align-items-center justify-content-between">
-            <a href="index.html" class="logo d-flex align-items-center">
-                <img src="content/assets/img/logo.png" alt="">
-                <span class="d-none d-lg-block">Monitoring</span>
-            </a>
-              <i class="bi bi-list toggle-sidebar-btn"></i>
-        </div><!-- End Logo -->
-        <li class="nav-item dropdown ms-auto">
-            <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm" id="profileDropdown" href="#" data-bs-toggle="dropdown">
-                Hai, <strong>@httpContext.Session.GetString("Nama") (@httpContext.Session.GetString("Role"))</strong>
-            </a>
+   <header id="header" class="header fixed-top d-flex align-items-center">
+    @{
+        var httpContext = ViewContext.HttpContext;
+    }
+    <div class="d-flex align-items-center justify-content-between">
+        <a href="index.html" class="logo d-flex align-items-center">
+            <img src="content/assets/img/logo.png" alt="">
+            <span class="d-none d-lg-block">Monitoring</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+    <li class="nav-item dropdown ms-auto">
+        <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm" id="profileDropdown" href="#" data-bs-toggle="dropdown">
+            Hai, <strong>@httpContext.Session.GetString("Nama") (@httpContext.Session.GetString("Role"))</strong>
+        </a>
 
-
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item custom-logout-btn" href="@Url.Action("Logout", "Login")">
-                    <i class="btn-icon bi bi-box-arrow-in-right"></i>
-                    Logout
-                </a>
-            </div>
-        </li>
-    </header><!-- End Header -->
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+            <a class="dropdown-item custom-logout-btn" href="@Url.Action("Logout", "Login")">
+                <i class="btn-icon bi bi-box-arrow-in-right"></i>
+                Logout
+            </a>
+        </div>
+    </li>
+</header>
     <!-- ======= Sidebar ======= -->
         
     <aside id="sidebar" class="sidebar">
@@ -93,46 +103,52 @@
         <ul class="sidebar-nav" id="sidebar-nav">
             @if (httpContext.Session.GetString("Role") == "admin")
             {
-                <span class="custom-h10">Dashboard</span>
+                <li class="nav-heading">Dashboard</li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" asp-controller="Dashboard" asp-action="Index">
-                        <i class="bi bi-grid"></i>
+                        <i class="bi bi-house-door-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <span class="custom-h10">Master</span>
+                <li class="nav-heading">Transaksi</li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        <span>Pendaftaran</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-box-arrow-down"></i>
+                        <span>Pengajuan</span>
+                    </a>
+                </li>
+                <li class="nav-heading">Master</li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" asp-controller="Akun" asp-action="Index">
-                        <i class="bi bi-journal-text"></i>
-                        <span>User</span>
+                        <i class="bi bi-person-bounding-box"></i>
+                        <span>Karyawan</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" asp-controller="Mahasiswa" asp-action="Index">
-                        <i class="bi bi-journal-text"></i>
+                        <i class="bi bi-people"></i>
                         <span>Mahasiswa</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" asp-controller="Kegiatan" asp-action="Index">
-                        <i class="bi bi-person"></i>
+                        <i class="bi bi-person-lines-fill"></i>
                         <span>Kegiatan</span>
                     </a>
                 </li>
-                <span class="custom-h10">Transaksi</span>
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="da" asp-action="Index">
+                    <a class="nav-link collapsed" asp-controller="Aktifitas" asp-action="Index">
                         <i class="bi bi-journal-text"></i>
-                        <span>Pengajuan Jam Plus</span>
+                        <span>Aktivitas</span>
                     </a>
                 </li>
-                <span class="custom-h10">Laporan</span>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Laporan" asp-action="Index">
-                        <i class="bi bi-person"></i>
-                        <span>Laporan</span>
-                    </a>
-                </li>
+               
             } 
             @if (httpContext.Session.GetString("Role") == "sekprod")
             {
@@ -148,12 +164,7 @@
                         <span>Laporan </span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="JamPlusMinus" asp-action="Index">
-                        <i class="bi bi-plus-slash-minus"></i>
-                        <span>Jam Plus & Jam Minus</span>
-                    </a>
-                </li>
+               
             }
             else
             {

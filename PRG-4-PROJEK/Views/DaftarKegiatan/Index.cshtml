@@ -1,9 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model List<PRG_4_PROJEK.Models.KegiatanModel>
+﻿@model List<PRG_4_PROJEK.Models.DaftarKegiatanModel>
 @{
-    ViewData["Title"] = "Kegiatan";
+    Layout = "_LayoutMahasiswa";
+    ViewData["Title"] = "Daftar Kegiatan";
     int no = 1;
 }
 
@@ -13,7 +11,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Kegiatan</h5>
+                    <h5 class="card-title">Pendaftaran Kegiatan</h5>
                     <hr />
                     @if (TempData["SuccessMessage"] != null)
                     {
@@ -25,36 +23,31 @@
                             </div>
                         </div>
                     }
-                    <a class="btn btn-primary" asp-action="Create">Tambah Kegiatan</a>
+                    <a class="btn btn-primary" asp-action="Create">Tambah(+)</a>
                     <p></p>
                     <table class="table datatable" id="myTable">
                         <thead>
                             <tr>
                                 <th scope="col">No</th>
-                                <th scope="col">ID</th>
-                                <th scope="col">Deskripsi</th>
-                                <th scope="col">Kapasitas</th>
-                                <th scope="col">Tanggal Mulai</th>
-                                <th scope="col">Tanggal Selesai</th>
-                                <th scope="col">Status Kegiatan</th>
+                                <th scope="col">NIM</th>
+                                <th scope="col">Nama Kegiatan</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                        <tbody>
-                            @foreach (var kegiatan in Model)
+                            @foreach (var dkegiatan in Model)
                             {
                                 <tr>
                                     <td>@(no++)</td>
-                                    <td>@kegiatan.id_kegiatan</td>
-                                    <td>@kegiatan.deskripsi</td>
-                                    <td>@kegiatan.kapasitas</td>
-                                    <td>@kegiatan.tglmulai</td>
-                                    <td>@kegiatan.tglselesai</td>
-                                    <td>@kegiatan.status</td>
+                                    <td>@dkegiatan.nim</td>
+                                    <td>@dkegiatan.id_kegiatan</td>
+                                    <td>@dkegiatan.status</td>
                                     <td>
-                                        <button class="btn btn-sm btn-danger delete-button" data-id="@kegiatan.id_kegiatan">
+                                        <button class="btn btn-sm btn-danger delete-button" data-id="@dkegiatan.id_daftar_kegiatan">
                                             <i class="fas fa-trash"></i>
                                         </button>
-                                        <a asp-controller="Kegiatan" asp-action="Edit" asp-route-id="@kegiatan.id_kegiatan" class="btn btn-sm btn-primary">
+                                        <a asp-controller="DaftarKegiatan" asp-action="Edit" asp-route-id="@dkegiatan.id_daftar_kegiatan" class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>
 
@@ -82,8 +75,8 @@
             var akunId = $(this).data("id");
 
             Swal.fire({
-                title: "Hapus kegiatan?",
-                text: "Apakah anda yakin ingin menghapus kegiatan ini?",
+                title: "Hapus Mahasiswa?",
+                text: "Apakah anda yakin ingin membatalkan pengajuan ini?",
                 icon: "warning",
                 confirmButtonText: "Iya",
                 showDenyButton: true,
@@ -92,7 +85,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/kegiatan/Delete/" + akunId, // Perbaiki URL dengan menambahkan tanda "/"
+                        url: "/dkegiatan/Delete/" + akunId,
                         type: "POST",
                         success: function (data) {
                             if (data.success) {
@@ -100,12 +93,12 @@
                                     // Refresh halaman setelah pengguna menekan tombol "OK"
                                     location.reload();
                                 });
-                       d     } else {
+                            } else {
                                 Swal.fire("Gagal!", data.message, "error");
                             }
                         },
                         error: function () {
-                            swal("Error", "Terjadi kesalahan saat menghapus kegiatan.", "error");
+                            swal("Error", "Terjadi kesalahan saat menghapus Mahasiswa.", "error");
                         }
                     });
                 }

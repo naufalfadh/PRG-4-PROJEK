@@ -34,21 +34,42 @@ namespace PRG_4_PROJEK.Controllers
         [HttpPost]
         public IActionResult Login(string npk, string password)
         {
-            // Pastikan bahwa username dan password valid
             if (string.IsNullOrEmpty(npk) || string.IsNullOrEmpty(password))
             {
-                TempData["ErrorMessage"] = "Username dan password harus diisi.";
-                return RedirectToAction("Index", "Login"); 
+                string errorMessage = "Username dan password harus diisi.";
+
+                // Modifikasi menggunakan swal.fire
+                string script = "<script type='text/javascript'>" +
+                                "Swal.fire({" +
+                                "  icon: 'error'," +
+                                "  title: 'Error!'," +
+                                "  text: '" + errorMessage + "'," +
+                                "})" +
+                                "</script>";
+
+                TempData["ErrorMessage"] = errorMessage;
+                TempData["Script"] = script;
+                return RedirectToAction("Index", "Login");
             }
-
-            // Dapatkan data anggota berdasarkan username dan password
             KaryawanModel karyawanModel = _karyawanRepository.getDataByUsernamePassword(npk, password);
-
             if (karyawanModel == null || karyawanModel.status == "tidak aktif")
             {
-                TempData["ErrorMessage"] = "Username dan password salah.";
-                return RedirectToAction("Index", "Login"); 
+                string errorMessage = "Username dan password salah.";
+
+                // Modifikasi menggunakan swal.fire
+                string script = "<script type='text/javascript'>" +
+                                "Swal.fire({" +
+                                "  icon: 'error'," +
+                                "  title: 'Error!'," +
+                                "  text: '" + errorMessage + "'," +
+                                "})" +
+                                "</script>";
+
+                TempData["ErrorMessage"] = errorMessage;
+                TempData["Script"] = script;
+                return RedirectToAction("Index", "Login");
             }
+
 
             // Jika berhasil, atur sesi
             string serializedModel = JsonConvert.SerializeObject(karyawanModel);

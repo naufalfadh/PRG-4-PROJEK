@@ -98,6 +98,9 @@
                         </div><br /><br />
 
                         <form method="post" action="PinMahasiswa/PinMahasiswa">
+                            <div>
+                                <input asp-for="rfid" class="form-control" value="@httpContext.Session.GetString("Id")" hidden>
+                            </div>
                             <div class="btn custom-btn custom-border-btn btn-naira btn-inverted">
                                 <input asp-for="pin" class="form-control form-control-lg border-left-0" type="pin" id="pinInput" placeholder="Masukkan PIN anda" required autofocus />
                             </div>
@@ -111,9 +114,10 @@
                                 <button type="button" class="btnn btn-secondary" onclick="appendDigit(7)">7</button>
                                 <button type="button" class="btnn btn-secondary" onclick="appendDigit(8)">8</button>
                                 <button type="button" class="btnn btn-secondary" onclick="appendDigit(9)">9</button><br>
+                                <button type="button" class="btnn btn-danger" onclick="deleteLastDigit()"><-</button>
                                 <button type="button" class="btnn btn-secondary" onclick="appendDigit(0)">0</button>
                                 <button type="submit" class="btnn btn-primary">OK</button>
-                                <button type="button" class="btnn btn-danger" onclick="deleteLastDigit()"><-</button>
+
                             </div>
                             <span asp-validation-for="pin" class="text-danger"></span>
 

@@ -57,6 +57,12 @@ namespace PRG_4_PROJEK.Controllers
         public IActionResult Create(KaryawanModel karyawanModel)
         {
 
+            if (_karyawanRepository.IsNPKAlreadyExists(karyawanModel.npk))
+            {
+                ModelState.AddModelError("NPK", "NPK sudah terdaftar.");
+                return View("Create", karyawanModel); // Ganti dengan nama view Anda
+            }
+
             if (ModelState.IsValid)
             {
                 _karyawanRepository.insertData(karyawanModel);
@@ -106,45 +112,16 @@ namespace PRG_4_PROJEK.Controllers
 
 
         [HttpPost]
-        public IActionResult Activate(string id)
+        public IActionResult Delete(string id)
         {
             KaryawanModel karyawanModel = new KaryawanModel();
-
-
 
             var response = new { success = false, message = "Gagal menghapus data." };
             try
             {
-                if (id != null)
+                if (!string.IsNullOrEmpty(id) && int.TryParse(id, out int karyawanId))
                 {
-                    _karyawanRepository.aktif(id);
-                    response = new { success = true, message = "Berhasil menghapus data." };
-                }
-                else
-                {
-                    response = new { success = false, message = "Karyawan tidak ditemukan" };
-                }
-            }
-            catch (Exception ex)
-            {
-                response = new { success = false, message = ex.Message };
-            }
-            return Json(response);
-        }
-
-        [HttpPost]
-        public IActionResult Deactivate(string id)
-        {
-            KaryawanModel karyawanModel = new KaryawanModel();
-
-
-
-            var response = new { success = false, message = "Gagal menghapus data." };
-            try
-            {
-                if (id != null)
-                {
-                    _karyawanRepository.tidakAktif(id);
+                    _karyawanRepository.deleteData(karyawanId);
                     response = new { success = true, message = "Berhasil menghapus data." };
                 }
                 else
@@ -161,3 +138,4 @@ namespace PRG_4_PROJEK.Controllers
 
     }
 }
+

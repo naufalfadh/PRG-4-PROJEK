@@ -11,7 +11,7 @@
         <h1>Akun</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Master Akun</li>
+                <li class="breadcrumb-item">Akun</li>
                 <li class="breadcrumb-item active">Tambah Akun</li>
             </ol>
         </nav>
@@ -25,6 +25,10 @@
                         <label asp-for="npk">NPK <span style="color: red;">*</span></label>
                         <input asp-for="npk" type="text" class="form-control input-with-border" placeholder="NPK">
                         <span asp-validation-for="npk" class="text-danger"></span>
+                        @if (ViewData["NPKError"] != null)
+                        {
+                            <div class="text-danger">@ViewData["NPKError"]</div>
+                        }
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="nama">Nama <span style="color: red;">*</span></label>
@@ -56,8 +60,8 @@
                         <label asp-for="role">Role <span style="color: red;">*</span></label>
                         <select asp-for="role" class="form-control input-with-border">
                             <option value="" disabled selected>Pilih role</option>
-                            <option value="admin">admin</option>
-                            <option value="sekprod">sekprod</option>
+                            <option value="admin">Admin</option>
+                            <option value="sekprod">Sekretaris Prodi</option>
                         </select>
                         <span asp-validation-for="role" class="text-danger"></span>
                     </div>

@@ -46,10 +46,6 @@ namespace PRG_4_PROJEK.Controllers
             {
                 kegiatanModel = JsonConvert.DeserializeObject<KegiatanModel>(serializedModel);
             }
-            /*if (kegiatanModel.jk == "admin")
-            {
-                return RedirectToAction("Index", "Pasien");
-            }*/
             return View();
         }
 
@@ -69,17 +65,13 @@ namespace PRG_4_PROJEK.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            // Mengambil data KegiatanModel dari repository berdasarkan ID
             KegiatanModel kegiatanModel = _kegiatanRepository.getData(id);
 
-            // Memeriksa apakah data KegiatanModel ditemukan
             if (kegiatanModel == null)
             {
-                // Jika tidak ditemukan, kembalikan response dengan status NotFound
                 return NotFound();
             }
 
-            // Langsung redirect ke dashboard tanpa memeriksa role
             return View(kegiatanModel);
         }
 
@@ -100,6 +92,9 @@ namespace PRG_4_PROJEK.Controllers
                 newKegiatanModel.id_kegiatan = kegiatanModel.id_kegiatan;
                 newKegiatanModel.deskripsi = kegiatanModel.deskripsi;
                 newKegiatanModel.kapasitas = kegiatanModel.kapasitas;
+                newKegiatanModel.tglmulai = kegiatanModel.tglmulai;
+                newKegiatanModel.tglselesai = kegiatanModel.tglselesai;
+                newKegiatanModel.status = kegiatanModel.status;
 
                 _kegiatanRepository.updateData(newKegiatanModel);
                 TempData["SuccessMessage"] = "data berhasil diupdate.";

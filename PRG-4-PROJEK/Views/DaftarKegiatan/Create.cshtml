@@ -1,0 +1,63 @@
+﻿@model PRG_4_PROJEK.Models.DaftarKegiatanModel
+
+@{
+    Layout = "_LayoutMahasiswa";
+    ViewData["Title"] = "Daftar Kegiatan";
+}
+
+ @{
+        var httpContext = ViewContext.HttpContext;
+    }
+
+<body>
+   
+    <div class="pagetitle">
+        <h1>Daftar Kegiatan</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Daftar Kegiatan</li>
+               
+            </ol>
+        </nav>
+    </div
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Tambah Kegiatan</h4>
+                <form class="forms-sample" method="post">
+                <div class="form-group mb-3">
+                    <label asp-for="nim">NIM <span style="color: red;">*</span></label>
+                    <input asp-for="nim" type="text" class="form-control input-with-border" placeholder="NIM" value="@httpContext.Session.GetString("Nim")" readonly>
+                    <span asp-validation-for="nim" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="nama">Nama</label>
+                    <input id="nama" type="text" class="form-control" value="@httpContext.Session.GetString("Nama")" readonly>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="jamminus">Jam Minus</label>
+                    <input id="jamminus" type="text" class="form-control" value="@httpContext.Session.GetString("JM")" readonly>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="jamplus">Jam Plus</label>
+                    <input id="jamplus" type="text" class="form-control" value="@httpContext.Session.GetString("JP")" readonly>
+                </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="id_kegiatan">Pilih Kegiatan <span style="color: red;">*</span></label>
+                        <select asp-for="id_kegiatan" asp-items='new SelectList(ViewBag.kegiatanList, "id_kegiatan", "deskripsi")' class="form-control">
+                            <option value="">Pilih Kegiatan</option>
+                        </select>
+                    </div>
+                  
+                    <div class="form-group mb-3">
+                        <input asp-for="status" type="text" class="form-control input-with-border" placeholder="Status" value="Menunggu Persetujuan PIC" hidden>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                            <a asp-controller="DaftarKegiatan" asp-action="Index" class="btn btn-light">Kembali</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

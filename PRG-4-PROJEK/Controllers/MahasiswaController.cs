@@ -34,7 +34,7 @@ namespace PRG_4_PROJEK.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            MahasiswaModel mahasiswaModel = new MahasiswaModel();
+            MahasiswaModel  mahasiswaModel = new MahasiswaModel();
 
             string serializedModel = HttpContext.Session.GetString("Identity");
 
@@ -52,6 +52,15 @@ namespace PRG_4_PROJEK.Controllers
         [HttpPost]
         public IActionResult Create(MahasiswaModel mahasiswaModel)
         {
+            if (_mahasiswaRepository.IsNIMAlreadyExists(mahasiswaModel.nim))
+            {
+                ModelState.AddModelError("NIM", "NIM sudah terdaftar.");
+            }
+
+            if (_mahasiswaRepository.IsRFIDAlreadyExists(mahasiswaModel.rfid))
+            {
+                ModelState.AddModelError("RFID", "RFID sudah terdaftar.");
+            }
 
             if (ModelState.IsValid)
             {
@@ -59,6 +68,7 @@ namespace PRG_4_PROJEK.Controllers
                 TempData["SuccessMessage"] = "Data berhasil ditambahkan";
                 return RedirectToAction("Index");
             }
+
             return View(mahasiswaModel);
         }
 

@@ -49,6 +49,7 @@ namespace PRG_4_PROJEK.Controllers
             HttpContext.Session.SetString("Identity", serializedModel);
             HttpContext.Session.SetString("Id", mahasiswaModel.rfid);
             HttpContext.Session.SetString("Nama", mahasiswaModel.nama);
+            HttpContext.Session.SetString("Nim", mahasiswaModel.nim);
             HttpContext.Session.SetString("JP", mahasiswaModel.jp.ToString()); // Convert to string
             HttpContext.Session.SetString("JM", mahasiswaModel.jm.ToString()); // Convert to string
             HttpContext.Session.SetString("Status", mahasiswaModel.status);

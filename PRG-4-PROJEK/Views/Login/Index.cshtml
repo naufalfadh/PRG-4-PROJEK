@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="~/content/vendors/base/vendor.bundle.base.css">
     <link rel="stylesheet" href="~/content/css/style.css">
     <link rel="shortcut icon" href="~/content/images/favicon.png" />
+    <!-- Pastikan Anda sudah menyertakan pustaka Swal -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             background-image: url('content/images/IMG_Background.jpg');
@@ -54,7 +57,7 @@
                                                     <i class="mdi mdi-account-outline text-primary"></i>
                                                 </span>
                                             </div>
-                                            <input asp-for="npk" class="form-control form-control-lg border-left-0" placeholder="NPK" required />
+                                            <input asp-for="npk" class="form-control form-control-lg border-left-0" placeholder="NPK"  />
                                         </div>
                                         <span asp-validation-for="npk" class="text-danger"></span>
                                     </div>
@@ -66,7 +69,7 @@
                                                     <i class="mdi mdi-key-outline text-primary"></i>
                                                 </span>
                                             </div>
-                                            <input asp-for="password" class="form-control form-control-lg border-left-0" type="password" id="passwordInput" placeholder="Password" required />
+                                            <input asp-for="password" class="form-control form-control-lg border-left-0" type="password" id="passwordInput" placeholder="Password" />
                                             <div class="input-group-append">
                                                 <span class="input-group-text bg-light border-left-0">
                                                     <i id="togglePassword" class="mdi mdi-eye-outline text-primary"></i>
@@ -85,13 +88,18 @@
                                     <div class="col-12">
                                         <a asp-controller="DashboardUtama" asp-action="Index" class="link-primary w-100">Kembali ke halaman utama?</a>
                                     </div>
-
                                     @if (TempData["ErrorMessage"] != null)
                                     {
-                                        <div class="alert alert-danger">
-                                            @TempData["ErrorMessage"]
-                                        </div>
+                                        @if (TempData["Script"] != null)
+                                        {
+                                            @(Html.Raw(TempData["Script"]))
+                                        }
+
+                                        TempData["ErrorMessage"] = null;
+                                        TempData["Script"] = null;
+
                                     }
+
                                 </form>
                             </div>
                         </div>
@@ -122,20 +130,11 @@
                 togglePassword.classList.toggle('mdi-eye-off-outline', type === 'text');
             });
         });
-    </script>
 
-    <!-- container-scroller -->
-    <!-- base:js -->
+    </script>
     <script src="~/content/vendors/base/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page-->
-    <!-- End plugin js for this page-->
-    <!-- inject:js -->
     <script src="~/content/js/template.js"></script>
     <!-- endinject -->
-    <!-- plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-
     <a href="d:\projek prg 4\prg-4-projek\prg-4-projek\views\login\index.cshtml">d:\projek prg 4\prg-4-projek\prg-4-projek\views\login\index.cshtml</a>- Custom js for this page-->
     <!-- End custom js for this page-->
 

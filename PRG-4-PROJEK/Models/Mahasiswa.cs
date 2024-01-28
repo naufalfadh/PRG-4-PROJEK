@@ -54,14 +54,17 @@ namespace PRG_4_PROJEK.Models
             }
             return mahasiswaModel;
         }
-        public MahasiswaModel getDataByPassword(string pin)
+        public MahasiswaModel getDataByPassword(string rfid, string pin)
         {
+
             MahasiswaModel mahasiswaModel = new MahasiswaModel();
             try
             {
-                string query = "SELECT * FROM mahasiswa WHERE pin = @p1";
+
+                string query = "SELECT * FROM mahasiswa WHERE pin = @p1 and rfid = @p2";
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", pin);
+                command.Parameters.AddWithValue("@p2", rfid);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -99,7 +102,7 @@ namespace PRG_4_PROJEK.Models
             List<MahasiswaModel> mahasiswaList = new List<MahasiswaModel>();
             try
             {
-                string query = "select * from mahasiswa";
+                string query = "SELECT * from mahasiswa";
                 SqlCommand command = new SqlCommand(query, _connection);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -126,8 +129,11 @@ namespace PRG_4_PROJEK.Models
             {
                 Console.WriteLine(ex.Message);
             }
+           
+
             return mahasiswaList;
         }
+
 
         public MahasiswaModel getData(string id)
         {
@@ -223,6 +229,53 @@ namespace PRG_4_PROJEK.Models
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        public bool IsNIMAlreadyExists(string nim)
+        {
+            try
+            {
+                string query = "SELECT COUNT(*) FROM mahasiswa WHERE nim = @p1";
+                SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", nim);
+                _connection.Open();
+
+                int count = (int)command.ExecuteScalar();
+
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+        public bool IsRFIDAlreadyExists(string rfid)
+        {
+            try
+            {
+                string query = "SELECT COUNT(*) FROM mahasiswa WHERE rfid = @p1";
+                SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", rfid);
+                _connection.Open();
+
+                int count = (int)command.ExecuteScalar();
+
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                _connection.Close();
             }
         }
     } 

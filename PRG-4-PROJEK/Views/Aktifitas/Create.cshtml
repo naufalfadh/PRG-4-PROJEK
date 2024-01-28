@@ -1,0 +1,64 @@
+﻿@model PRG_4_PROJEK.Models.AktifitasModel
+
+@{
+    ViewData["Title"] = "Tambah Aktifitas";
+}
+
+
+
+<body>
+    <div class="pagetitle">
+        <h1>Aktifitas</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Aktifitas</li>
+                <li class="breadcrumb-item active">Tambah Aktifitas</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tambah Aktifitas</h4>
+                <form class="row g-3" method="post">
+                    <div class="form-group mb-3">
+                        <label asp-for="nama">Pilih Mahasiswa <span style="color: red;">*</span></label>
+                        <select asp-for="nama" asp-items='new SelectList(ViewBag.mahasiswaList, "nim", "nama")' class="form-control" id="namaMahasiswa" onchange="fillNIM()">
+                            <option value="">Pilih Mahasiswa</option>
+                        </select>
+                        <span asp-validation-for="nama" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="nim">NIM <span style="color: red;">*</span></label>
+                        <input asp-for="nim" type="text" class="form-control input-with-border" placeholder="Masukkan NIM">
+                        <span asp-validation-for="nim" class="text-danger"></span>
+                    </div>
+                   
+                    <div class="form-group mb-3">
+                        <label asp-for="deskripsi">Deskripsi <span style="color: red;">*</span></label>
+                        <textarea asp-for="deskripsi" class="form-control input-with-border" rows="3" placeholder="Masukkan Deskripsi"></textarea>
+                        <span asp-validation-for="deskripsi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="jp">Jam Plus <span style="color: red;">*</span></label>
+                        <input asp-for="jp" type="number" class="form-control input-with-border" placeholder="Masukkan Jam Plus">
+                        <span asp-validation-for="jp" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="jm">Jam Minus <span style="color: red;">*</span></label>
+                        <input asp-for="jm" type="number" class="form-control input-with-border" placeholder="Masukkan Jam Minus">
+                        <span asp-validation-for="jm" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                    <a asp-controller="Aktifitas" asp-action="Index" class="btn btn-light">Batal</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function fillNIM() {
+        var selectedNIM = $("#namaMahasiswa").val(); 
+        $("#nim").val(selectedNIM);
+    }
+</script>
