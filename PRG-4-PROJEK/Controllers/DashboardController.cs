@@ -32,5 +32,7 @@ namespace PRG_4_PROJEK.Controllers
             return View(_karyawanRepository.getAllData());
         }
 
+        
+
     }
 }

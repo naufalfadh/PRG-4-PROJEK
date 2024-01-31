@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace PRG_4_PROJEK.Models
 {
@@ -115,25 +117,29 @@ namespace PRG_4_PROJEK.Models
             return daftarkegiatanList;
         }
 
-
-        public DaftarKegiatanModel getData(int id_daftar_kegiatan)
+        public List<DaftarKegiatanModel> getAllDataJP(int id)
         {
-            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+            List<DaftarKegiatanModel> daftarkegiatanList = new List<DaftarKegiatanModel>();
             try
             {
-                Console.WriteLine("id_pendaftaran : " + id_daftar_kegiatan);
-                string query = "select * from pendaftaran where id_daftarkegiatan = @p1";
+                string query = "select * from pendaftaran WHERE id_daftarkegiatan = "+id;
                 SqlCommand command = new SqlCommand(query, _connection);
-                command.Parameters.AddWithValue("@p1", id_daftar_kegiatan);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                daftarkegiatanModel.id_daftarkegiatan = Convert.ToInt32(reader["id_daftarkegiatan"]);
-                daftarkegiatanModel.nim = reader["nim"].ToString();
-                daftarkegiatanModel.id_kegiatan = Convert.ToInt32(reader["id_kegiatan"]);
-                daftarkegiatanModel.deskripsi_penolakan = reader["deskripsi_penolakan"].ToString();
-                daftarkegiatanModel.catatan = reader["catatan"].ToString();
-                daftarkegiatanModel.status = reader["status"].ToString();
+                while (reader.Read())
+                {
+                    DaftarKegiatanModel daftarkegiatan = new DaftarKegiatanModel
+                    {
+                        id_daftarkegiatan = Convert.ToInt32(reader["id_daftarkegiatan"]),
+                        nim = reader["nim"].ToString(),
+                        id_kegiatan = Convert.ToInt32(reader["id_kegiatan"]),
+                        deskripsi_penolakan = reader["deskripsi_penolakan"].ToString(),
+                        catatan = reader["catatan"].ToString(),
+                        status = reader["status"].ToString(),
+                    };
+
+                    daftarkegiatanList.Add(daftarkegiatan);
+                }
                 reader.Close();
                 _connection.Close();
             }
@@ -141,8 +147,32 @@ namespace PRG_4_PROJEK.Models
             {
                 Console.WriteLine(ex.Message);
             }
+            return daftarkegiatanList;
+        }
 
-            return daftarkegiatanModel;
+
+        public DaftarKegiatanModel getData(int id_daftar_kegiatan)
+        {
+            DaftarKegiatanModel pengajuanModel = new DaftarKegiatanModel();
+            try
+            {
+                Console.WriteLine("id_pendaftaran : " + id_daftar_kegiatan);
+                string query = "SELECT * FROM pendaftaran JOIN kegiatan ON pendaftaran.id_kegiatan = kegiatan.id_kegiatan JOIN mahasiswa ON pendaftaran.nim = mahasiswa.nim";
+                SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", id_daftar_kegiatan);
+                _connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                pengajuanModel.id_daftarkegiatan = Convert.ToInt32(reader["id_daftarkegiatan"]);
+                pengajuanModel.nim = reader["nim"].ToString();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return pengajuanModel;
         }
 
         public void insertData(DaftarKegiatanModel daftarkegiatanModel)
@@ -171,9 +201,27 @@ namespace PRG_4_PROJEK.Models
         {
             try
             {
-                string query = "UPDATE pendaftaran SET status='Dibatalkan' id_daftar_kegiatan = @p1";
+                string query = "UPDATE pendaftaran SET status='Dibatalkan' id_daftarkegiatan = @p1";
                 using SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", id);
+                _connection.Open();
+                command.ExecuteNonQuery();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void TolakJP(int id,string deskripsi_penolakan)
+        {
+            try
+            {
+                string query = "UPDATE pendaftaran SET status='Ditolak', deskripsi_penolakan = @p2 WHERE id_daftarkegiatan = @p1";
+                using SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@p1", id);
+                command.Parameters.AddWithValue("@p2", deskripsi_penolakan);
                 _connection.Open();
                 command.ExecuteNonQuery();
                 _connection.Close();
@@ -265,6 +313,44 @@ namespace PRG_4_PROJEK.Models
                 Console.WriteLine(ex.Message);
             }
             return kegiatanList;
+        }
+        public void AccJP(PengajuanModel pengajuanModel)
+        {
+            try
+            {
+
+                string ppp = "SELECT id_kegiatan FROM pendaftaran WHERE id_daftarkegiatan = @p1";
+                SqlCommand commands = new SqlCommand(ppp, _connection);
+                commands.Parameters.AddWithValue("@p1", pengajuanModel.id_daftarkegiatan);
+                _connection.Open();
+                int idkegiatan = (int)commands.ExecuteScalar();
+                _connection.Close();
+                Console.WriteLine("id pend : " + idkegiatan);
+
+                string query = "INSERT INTO pengajuan VALUES(@p1, @p2, @p3, GETDATE(), @p5)";
+                SqlCommand command = new SqlCommand(query, _connection);
+
+                command.Parameters.AddWithValue("@p1", pengajuanModel.id_daftarkegiatan);
+                command.Parameters.AddWithValue("@p2", pengajuanModel.jam_plus);
+                command.Parameters.AddWithValue("@p3", pengajuanModel.status);
+                command.Parameters.AddWithValue("@p5", "1");
+
+                _connection.Open();
+                command.ExecuteNonQuery();
+                _connection.Close();
+
+                string query1 = "UPDATE pendaftaran SET status = 'Pengajuan Diterima' WHERE id_kegiatan = @p1";
+                using SqlCommand command1 = new SqlCommand(query1, _connection);
+                command1.Parameters.AddWithValue("@p1", idkegiatan);
+                _connection.Open();
+                command1.ExecuteNonQuery();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("srt pengajuan : " + ex.Message);
+            }
+
         }
     } 
 }

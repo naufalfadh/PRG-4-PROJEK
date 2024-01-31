@@ -23,8 +23,8 @@
                             </div>
                         </div>
                     }
-                    <a class="btn btn-primary" asp-action="Create">Tambah(+)</a>
-                    <p></p>
+@*                     <a class="btn btn-primary" asp-action="Create">Tambah(+)</a>
+ *@                    <p></p>
                     <table class="table datatable" id="myTable">
                         <thead>
                             <tr>
@@ -38,7 +38,7 @@
                        <tbody>
                             @foreach (var dkegiatan in Model)
                             {
-                                <tr>
+                                <tr data-deskripsi-penolakan="@dkegiatan.deskripsi_penolakan">
                                     <td>@(no++)</td>
                                     <td>@dkegiatan.nim</td>
                                     <td>@dkegiatan.id_kegiatan</td>
@@ -50,9 +50,9 @@
                                         <button class="btn btn-sm btn-danger edit-button" data-id="@dkegiatan.id_daftarkegiatan">
                                             <i class="fas fa-discord"></i>
                                         </button>
-                                        @* <a asp-controller="DaftarKegiatan" asp-action="Edit" asp-route-id="@dkegiatan.id_daftarkegiatan" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i>
-                                        </a> *@
+                                        <button class="btn btn-sm btn-success ulang-button" data-id="@dkegiatan.id_daftarkegiatan" data-kegiatan-id="@dkegiatan.id_kegiatan" data-kegiatan-tolak="@dkegiatan.deskripsi_penolakan">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
 
                                     </td>
                                 </tr>
@@ -63,6 +63,30 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pengajuan Ulang</h5>
+                    <a href="#" class="btn-close" data-dismiss="modal"></a>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin Mengajukan Ulang pendaftaran ini?</p>
+
+                    <!-- Form for inputting deskripsi_penolakan -->
+                    <form id="deskripsiPenolakanForm">
+                        <div class="mb-3">
+                            <label for="deskripsi_penolakan" class="form-label">Deskripsi Penolakan : <span id="kegiatanIdPlaceholder"></span></label>
+                            <textarea class="form-control" id="deskripsi_penolakan" name="deskripsi_penolakan" rows="3" id="kegiatanIdPlaceholder" readonly></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="confirmAcceptButton">Terima</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -108,9 +132,7 @@
             });
         });
     });
-</script>
 
-<script>
     $(document).ready(function () {
         $('#myTable').DataTable();
     });
@@ -150,5 +172,67 @@
                 }
             });
         });
+    });
+
+    $(document).ready(function () {
+        $(".ulang-button").click(function () {
+            var akunId = $(this).data("id");
+            var kegiatanId = $(this).data("kegiatan-id");
+            var sss = $(this).data("kegiatan-tolak");
+            var deskripsiPenolakan = $(this).closest('tr').data('deskripsi-penolakan');
+            console.log(akunId);
+            console.log(kegiatanId);
+            console.log(deskripsiPenolakan);
+
+            // Set the content of the modal based on kegiatanId
+            $("#confirmAcceptButton").data("id", akunId);
+            $("#confirmAcceptButton").data("kegiatanId", kegiatanId);
+            $("#confirmAcceptButton").data("sss", sss);
+            $("#deskripsi_penolakan").val(deskripsiPenolakan);
+
+            // Show the modal
+            $('#confirmModal').modal('show');
+        });
+
+        // Handle click on the "Terima" button in the modal
+        $("#confirmAcceptButton").click(function () {
+            var akunId = $(this).data("id");
+            var kegiatanId = $(this).data("kegiatanId");
+            var sss = $(this).data("sss");
+            var deskripsiPenolakan = $("#deskripsi_penolakan").val();
+            console.log(akunId);
+            console.log(kegiatanId);
+            console.log(deskripsiPenolakan);
+            $("#deskripsi_penolakan").val(deskripsiPenolakan);
+
+            $.ajax({
+                url: "/DaftarKegiatan/PengajuanJP/" + akunId,
+                type: "POST",
+                data: { id: akunId, deskripsi_penolakan: deskripsiPenolakan },
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire("Sukses!", data.message, "success").then(() => {
+                            // Refresh the page after the user clicks "OK"
+                            location.reload();
+                        });
+                    } else {
+                        // Handle the error case
+                        Swal.fire("Gagal!", data.message, "error");
+                    }
+                },
+                error: function () {
+                    // Handle the error case
+                    console.error("An error occurred during the request");
+                }
+            });
+
+            // Close the modal after the user clicks the "Terima" button
+            $('#confirmModal').modal('hide');
+        });
+    });
+
+    $('#confirmModal').on('hidden.bs.modal', function () {
+        // Clear the textarea when the modal is closed
+        $('#deskripsi_penolakan').val('');
     });
 </script>

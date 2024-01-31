@@ -21,5 +21,12 @@ namespace PRG_4_PROJEK.Models
         public string status { get; set; }
        
     }
+
+    public class mhsLap
+    {
+        public string deskripsi { get; set; }
+        public int jam_plus { get; set; }
+        public int jam_minus { get; set; }
+    }
    
 }

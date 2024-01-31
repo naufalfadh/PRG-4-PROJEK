@@ -194,5 +194,36 @@ namespace PRG_4_PROJEK.Controllers
             // Langsung redirect ke dashboard tanpa memeriksa role
             return Json(response);
         }
+
+        [HttpPost]
+        public IActionResult BatalJP(int id, string deskripsi_penolakan)
+        {
+            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+
+
+            Console.WriteLine("id: "+id);
+            Console.WriteLine("desc: " + deskripsi_penolakan);
+            // Menghapus data berdasarkan ID
+            var response = new { success = false, message = "Gagal melakukan penolakan." };
+            try
+            {
+                if (id != null)
+                {
+                    _daftarkegiatanRepository.TolakJP(id,deskripsi_penolakan);
+                    response = new { success = true, message = "Penolakan berhasil dilakukan." };
+                }
+                else
+                {
+                    response = new { success = false, message = "pendaftaran tidak ditemukan" };
+                }
+            }
+            catch (Exception ex)
+            {
+                response = new { success = false, message = ex.Message };
+            }
+
+            // Langsung redirect ke dashboard tanpa memeriksa role
+            return Json(response);
+        }
     }
 }

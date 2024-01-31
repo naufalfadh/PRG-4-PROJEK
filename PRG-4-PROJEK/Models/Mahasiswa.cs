@@ -119,7 +119,7 @@ namespace PRG_4_PROJEK.Models
                         jm = Convert.ToInt32(reader["jam_minus"]),
                         softskil = reader["softskil"].ToString(),
                         status = reader["status"].ToString(),
-                };
+                    };
                     mahasiswaList.Add(mahasiswa);
                 }
                 reader.Close();
@@ -160,6 +160,8 @@ namespace PRG_4_PROJEK.Models
             }
             return mahasiswaModel;
         }
+
+        
 
         public void insertData(MahasiswaModel mahasiswaModel)
         {
@@ -277,6 +279,46 @@ namespace PRG_4_PROJEK.Models
             {
                 _connection.Close();
             }
+        }
+
+        public List<mhsLap> getDetail(string id)
+        {
+            Console.WriteLine("idid :" + id);
+            List<mhsLap> mahasiswaList = new List<mhsLap>();
+            try
+            {
+                string query = "SELECT k.deskripsi as Deskripsi, p.jam_plus as Jam_Plus, NULL as Jam_Minus FROM pengajuan as p " +
+                    "JOIN pendaftaran as pp ON p.id_daftarkegiatan = pp.id_daftarkegiatan " +
+                    "JOIN kegiatan as k ON pp.id_kegiatan = k.id_kegiatan " +
+                    "JOIN mahasiswa as m ON pp.nim = m.nim " +
+                    "WHERE m.nim = '"+ id +"' "+
+                    "UNION ALL " +
+                    "SELECT deskripsi as Deskripsi, jam_plus as Jam_Plus, jam_minus as Jam_Minus " +
+                    "FROM aktifitas " +
+                    "WHERE nim = '"+id+"'";
+
+                SqlCommand command = new SqlCommand(query, _connection);
+                _connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    mhsLap mahasiswa = new mhsLap
+                    {
+                        deskripsi = reader["Deskripsi"].ToString(),
+                        jam_plus = reader["Jam_Plus"] != DBNull.Value ? Convert.ToInt32(reader["Jam_Plus"].ToString()) : 0,
+                        jam_minus = reader["Jam_Minus"] != DBNull.Value ? Convert.ToInt32(reader["Jam_Minus"].ToString()) : 0,
+
+                    };
+                    mahasiswaList.Add(mahasiswa);
+                }
+                reader.Close();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("detail :"+ex.Message);
+            }
+            return mahasiswaList;
         }
     } 
 }

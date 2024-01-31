@@ -1,0 +1,48 @@
+﻿@model PRG_4_PROJEK.Models.PengajuanModel
+
+@{
+    ViewData["Title"] = "Penerimaan Pengajuan";
+}
+
+ @{
+        var httpContext = ViewContext.HttpContext;
+    }
+
+<body>
+   
+    <div class="pagetitle">
+        <h1>Penerimaan Pengajuan JP</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Penerimaan Pengajuan JP</li>
+               
+            </ol>
+        </nav>
+    </div
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Terima Pengajuan</h4>
+                <form class="forms-sample" method="post">
+                <div class="form-group mb-3">
+                    <label asp-for="id_daftarkegiatan">Kegiatan<span style="color: red;">*</span></label>
+                    <input asp-for="id_daftarkegiatan" type="text" class="form-control input-with-border"  readonly>
+                    <span asp-validation-for="id_daftarkegiatan" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="jam_plus">Jam Plus<span style="color: red;">*</span></label>
+                    <input asp-for="jam_plus" type="text" class="form-control input-with-border"  readonly>
+                    <span asp-validation-for="jam_plus" class="text-danger"></span>
+                </div>
+                  
+                    <div class="form-group mb-3">
+                        <input asp-for="status" type="text" class="form-control input-with-border" placeholder="Status" value="Diterima" hidden>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Simpan</button>
+                            <a asp-controller="DaftarKegiatan" asp-action="IndexJP" class="btn btn-light">Kembali</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

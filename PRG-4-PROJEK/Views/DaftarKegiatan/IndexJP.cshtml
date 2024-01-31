@@ -46,11 +46,11 @@
                                     <td>@dkegiatan.id_kegiatan</td>
                                     <td>@dkegiatan.status</td>
                                     <td>
-                                        <button class="btn btn-sm btn-danger delete-button" data-id="@dkegiatan.id_daftarkegiatan">
+                                        <a asp-controller="Pengajuan" asp-action="AccJP" asp-route-id="@dkegiatan.id_daftarkegiatan" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-success delete-button" data-id="@dkegiatan.id_daftarkegiatan" data-kegiatan-id="@dkegiatan.id_kegiatan">
                                             <i class="fas fa-trash"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-primary delete-button" data-id="@dkegiatan.id_daftarkegiatan">
-                                            <i class="fas fa-success"></i>
                                         </button>
                                         @*  <a asp-controller="DaftarKegiatan" asp-action="Edit" asp-route-id="@dkegiatan.id_daftarkegiatan" class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i>
@@ -65,6 +65,30 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Penolakan Pendaftaran</h5>
+                    <a href="#" class="btn-close" data-dismiss="modal"></a>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin Menolak pendaftaran ini?</p>
+
+                    <!-- Form for inputting deskripsi_penolakan -->
+                    <form id="deskripsiPenolakanForm">
+                        <div class="mb-3">
+                            <label for="deskripsi_penolakan" class="form-label">Deskripsi Penolakan <span id="kegiatanIdPlaceholder"></span></label>
+                            <textarea class="form-control" id="deskripsi_penolakan" name="deskripsi_penolakan" rows="3"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="confirmAcceptButton">Terima</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -78,38 +102,55 @@
     $(document).ready(function () {
         $(".delete-button").click(function () {
             var akunId = $(this).data("id");
+            var kegiatanId = $(this).data("kegiatan-id");
             console.log(akunId);
+            console.log(kegiatanId);
 
-            Swal.fire({
-                title: "Terima Pendaftaran Mahasiswa?",
-                text: "Apakah anda yakin ingin menerima pendaftaran ini?",
-                icon: "warning",
-                confirmButtonText: "Iya",
-                showDenyButton: true,
-                denyButtonText: "Tidak",
-                dangerMode: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/DaftarKegiatan/AccPend/" + akunId, // Perbaiki URL dengan menambahkan tanda "/"
-                        type: "POST",
-                        success: function (data) {
-                            if (data.success) {
-                                Swal.fire("Sukses!", data.message, "success").then(() => {
-                                    // Refresh halaman setelah pengguna menekan tombol "OK"
-                                    location.reload();
-                                });
-                                d
-                            } else {
-                                Swal.fire("Gagal!", data.message, "error");
-                            }
-                        },
-                        error: function () {
-                            swal("Error", "Terjadi kesalahan saat menghapus kegiatan.", "error");
-                        }
-                    });
+            // Set the content of the modal based on kegiatanId
+            $("#confirmAcceptButton").data("id", akunId);
+            $("#confirmAcceptButton").data("kegiatanId", kegiatanId);
+
+            // Show the modal
+            $('#confirmModal').modal('show');
+        });
+
+        // Handle click on the "Terima" button in the modal
+        $("#confirmAcceptButton").click(function () {
+            var akunId = $(this).data("id");
+            var kegiatanId = $(this).data("kegiatanId");
+            var deskripsiPenolakan = $("#deskripsi_penolakan").val();
+            console.log(akunId);
+            console.log(kegiatanId);
+            console.log(deskripsiPenolakan);
+
+            $.ajax({
+                url: "/DaftarKegiatan/BatalJP/" + akunId,
+                type: "POST",
+                data: { id: akunId, deskripsi_penolakan: deskripsiPenolakan },
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire("Sukses!", data.message, "success").then(() => {
+                            // Refresh the page after the user clicks "OK"
+                            location.reload();
+                        });
+                    } else {
+                        // Handle the error case
+                        Swal.fire("Gagal!", data.message, "error");
+                    }
+                },
+                error: function () {
+                    // Handle the error case
+                    console.error("An error occurred during the request");
                 }
             });
+
+            // Close the modal after the user clicks the "Terima" button
+            $('#confirmModal').modal('hide');
         });
+    });
+
+    $('#confirmModal').on('hidden.bs.modal', function () {
+        // Clear the textarea when the modal is closed
+        $('#deskripsi_penolakan').val('');
     });
 </script>
