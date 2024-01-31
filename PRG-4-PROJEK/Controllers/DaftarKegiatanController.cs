@@ -89,6 +89,25 @@ namespace PRG_4_PROJEK.Controllers
             return View();
         }
 
+        public IActionResult CreateP()
+        {
+            ViewBag.kegiatanList = _daftarkegiatanRepository.getAllDatakegiatan();
+            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+
+            string serializedModel = HttpContext.Session.GetString("Identity");
+
+            if (serializedModel == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                daftarkegiatanModel = JsonConvert.DeserializeObject<DaftarKegiatanModel>(serializedModel);
+            }
+
+            return View(_daftarkegiatanRepository.getAllDataJP());
+        }
+
         [HttpPost]
         public IActionResult Create(DaftarKegiatanModel daftarkegiatanModel)
         {
