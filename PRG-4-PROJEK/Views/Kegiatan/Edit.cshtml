@@ -40,8 +40,14 @@
                                 <span asp-validation-for="tglselesai" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-3">
-                                <input asp-for="status" type="text" class="form-control" placeholder="Status" value="aktif" hidden>
+                                <label for="status">Status</label>
+                                <select asp-for="status" class="form-control">
+                                    <option value="Belum Dikerjakan">Belum Dikerjakan</option>
+                                    <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+                                    <option value="Sudah Dikerjakan">Sudah Dikerjakan</option>
+                                </select>
                             </div>
+
                             <div class="form-group mb-3">
                                 <input asp-for="id_kegiatan" type="text" class="form-control" hidden />
                             </div>

@@ -40,7 +40,18 @@ namespace PRG_4_PROJEK.Controllers
 
             if (mahasiswaModel == null)
             {
-                TempData["ErrorMessage"] = "Mahasiswa belum terdaftar.";
+                string errorMessage = "Mahasiswa belum terdaftar.";
+
+                string script = "<script type='text/javascript'>" +
+                                "Swal.fire({" +
+                                "  icon: 'error'," +
+                                "  title: 'Error!'," +
+                                "  text: '" + errorMessage + "'," +
+                                "})" +
+                                "</script>";
+
+                TempData["ErrorMessage"] = errorMessage;
+                TempData["Script"] = script;
                 return RedirectToAction("Index", "LoginMahasiswa");
             }
 

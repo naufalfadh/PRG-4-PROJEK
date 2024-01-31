@@ -97,8 +97,18 @@
 
                                         TempData["ErrorMessage"] = null;
                                         TempData["Script"] = null;
-
                                     }
+                                    else if (TempData["SuccessMessage"] != null) 
+                                    {
+                                        @if (TempData["Script"] != null)
+                                        {
+                                            @(Html.Raw(TempData["Script"]))
+                                        }
+
+                                        TempData["SuccessMessage"] = null;
+                                        TempData["Script"] = null;
+                                    }
+
 
                                 </form>
                             </div>

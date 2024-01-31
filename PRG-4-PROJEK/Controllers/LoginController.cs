@@ -70,16 +70,31 @@ namespace PRG_4_PROJEK.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
-
             // Jika berhasil, atur sesi
             string serializedModel = JsonConvert.SerializeObject(karyawanModel);
             HttpContext.Session.SetString("Identity", serializedModel);
             HttpContext.Session.SetString("Id", karyawanModel.npk);
-            HttpContext.Session.SetString("Nama", karyawanModel.nama);  
+            HttpContext.Session.SetString("Nama", karyawanModel.nama);
             HttpContext.Session.SetString("Role", karyawanModel.role); // Simpan peran dalam sesi
 
-            // Arahkan ke halaman Dashboard
-            return RedirectToAction("Index", "Dashboard");
+            // Tambahkan script untuk menampilkan SweetAlert
+            string successMessage = "Login berhasil!"; // Pesan sukses
+            string successScript = "<script type='text/javascript'>" +
+                                  "Swal.fire({" +
+                                  "  icon: 'success'," +
+                                  "  title: 'Success!'," +
+                                  "  text: '" + successMessage + "'," +
+                                  "}).then(function(){" +
+                                  "  window.location.href = '/Dashboard';" + // Redirect ke halaman Dashboard setelah menutup SweetAlert
+                                  "});" +
+                                  "</script>";
+
+            TempData["SuccessMessage"] = successMessage;
+            TempData["Script"] = successScript;
+
+            return RedirectToAction("Index", "Login");
+
+
         }
 
 
@@ -89,7 +104,7 @@ namespace PRG_4_PROJEK.Controllers
             HttpContext.SignOutAsync();
 
             // Redirect pengguna ke halaman login
-            return RedirectToAction("Index", "DashboardUtama");
+            return RedirectToAction("Index", "Login");
         }
     }
 }

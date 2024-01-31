@@ -27,6 +27,7 @@
     <link href="~/content2/assets/css/bootstrap-icons.css" rel="stylesheet">
 
     <link href="~/content2/assets/css/templatemo-ebook-landing.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
     /* #hidden-container {
@@ -81,13 +82,17 @@
                         </div>
                         <br>
 
-
                         @if (TempData["ErrorMessage"] != null)
                         {
-                            <div class="alert alert-danger">
-                                @TempData["ErrorMessage"]
-                            </div>
+                            @if (TempData["Script"] != null)
+                            {
+                                @(Html.Raw(TempData["Script"]))
+                            }
+
+                            TempData["ErrorMessage"] = null;
+                            TempData["Script"] = null;
                         }
+                     
                         </div>
                 </form>
 

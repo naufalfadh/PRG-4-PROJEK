@@ -40,10 +40,26 @@ namespace PRG_4_PROJEK.Controllers
             if (mahasiswaModel == null)
             {
                 TempData["ErrorMessage"] = "PIN salah.";
+
+                // Menampilkan SweetAlert dengan pesan kesalahan
+                string errorMessage = TempData["ErrorMessage"] as string;
+                string script = "<script type='text/javascript'>" +
+                                "Swal.fire({" +
+                                "  icon: 'error'," +
+                                "  title: 'Error!'," +
+                                "  text: '" + errorMessage + "'," +
+                                "}).then(function(){" +
+                                "  window.location.href = '/PinMahasiswa';" + // Redirect ke halaman PinMahasiswa setelah menutup SweetAlert
+                                "});" +
+                                "</script>";
+
+                TempData["Script"] = script;
                 return RedirectToAction("Index", "PinMahasiswa");
             }
 
+            // Sesuaikan dengan logika bisnis Anda untuk login Mahasiswa
 
+            // Jika login berhasil, atur sesi dan arahkan ke halaman DashboardMahasiswa
             string serializedModel = JsonConvert.SerializeObject(mahasiswaModel);
             HttpContext.Session.SetString("Identity", serializedModel);
             HttpContext.Session.SetString("rfid", mahasiswaModel.rfid);
@@ -53,9 +69,23 @@ namespace PRG_4_PROJEK.Controllers
             HttpContext.Session.SetString("JM", mahasiswaModel.jm.ToString()); // Convert to string
             HttpContext.Session.SetString("Status", mahasiswaModel.status);
 
-            // Arahkan ke halaman Dashboard
-            return RedirectToAction("Index", "DashboardMahasiswa");
+            // Menampilkan SweetAlert untuk login berhasil
+            string successMessage = "Login berhasil!";
+            string successScript = "<script type='text/javascript'>" +
+                                   "Swal.fire({" +
+                                   "  icon: 'success'," +
+                                   "  title: 'Success!'," +
+                                   "  text: '" + successMessage + "'," +
+                                   "}).then(function(){" +
+                                   "  window.location.href = '/DashboardMahasiswa';" + // Redirect ke halaman DashboardMahasiswa setelah menutup SweetAlert
+                                   "});" +
+                                   "</script>";
+
+            TempData["SuccessMessage"] = successMessage;
+            TempData["Script"] = successScript;
+            return RedirectToAction("Index", "PinMahasiswa");
         }
+
 
         public IActionResult Logout()
         {

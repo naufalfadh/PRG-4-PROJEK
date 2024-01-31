@@ -11,10 +11,12 @@ namespace PRG_4_PROJEK.Controllers
         public MahasiswaController(IConfiguration configuration)
         {
             _mahasiswaRepository = new Mahasiswa(configuration);
+
         }
 
         public IActionResult Index()
         {
+
             MahasiswaModel mahasiswaModel = new MahasiswaModel();
 
             string serializedModel = HttpContext.Session.GetString("Identity");
@@ -102,8 +104,9 @@ namespace PRG_4_PROJEK.Controllers
                 newMahasiswaModel.nim  = mahasiswaModel.nim;
                 newMahasiswaModel.nama = mahasiswaModel.nama;
                 newMahasiswaModel.rfid = mahasiswaModel.rfid;
-                newMahasiswaModel.jk = mahasiswaModel.jk;
+                
                 newMahasiswaModel.pin = mahasiswaModel.pin;
+                newMahasiswaModel.jk = mahasiswaModel.jk;
                 newMahasiswaModel.status = mahasiswaModel.status;
 
                 _mahasiswaRepository.updateData(newMahasiswaModel);

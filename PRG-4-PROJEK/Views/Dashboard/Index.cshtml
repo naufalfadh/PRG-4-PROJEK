@@ -1,6 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Halaman";
+    ViewData["Title"] = "Dasboard";
 }
+<style>
+    .icon {
+        font-size: 5em;
+        margin: 10px;
+        padding: 40px;
+        margin-left:200px;
+    }
+</style>
 <div class="pagetitle">
     <h1>Dashboard</h1>
     <nav>
@@ -14,5 +22,91 @@
         </ol>
     </nav>
 </div>
+
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-xxl-6 col-md-8">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Mahasiswa</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="ps-3">
+                                    <p class="card-text">Jumlah Mahasiswa: <strong>@ViewBag.TotalMahasiswa</strong></p>
+                                </div>
+                                <div class="filter">
+                                    <a class="icon" href="#">
+                                        <i class="fa-solid fa-users"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6 col-md-8">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Karyawan</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="ps-3">
+                                    <p class="card-text">Jumlah Karyawan: <strong>@ViewBag.TotalKaryawan</strong></p>
+                                </div>
+                                <div class="filter">
+                                    <a class="icon" href="#">
+                                        <i class="fa-solid fa-user"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xxl-6 col-md-8">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Kegiatan</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="ps-3">
+                                    <p class="card-text">Jumlah Kegiatan: <strong>@ViewBag.TotalKegiatan</strong></p>
+                                </div>
+                                <div class="filter">
+                                    <a class="icon" href="#">
+                                        <i class="fa-solid fa-briefcase"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6 col-md-8">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Pengajuan</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="ps-3">
+                                    <p class="card-text">Jumlah Pengajuan: <strong>@ViewBag.TotalPengajuan</strong></p>
+                                </div>
+                                <div class="filter">
+                                    <a class="icon" href="#">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
 
 

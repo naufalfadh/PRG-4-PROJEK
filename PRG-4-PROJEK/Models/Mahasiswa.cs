@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace PRG_4_PROJEK.Models
 {
@@ -60,10 +62,10 @@ namespace PRG_4_PROJEK.Models
             MahasiswaModel mahasiswaModel = new MahasiswaModel();
             try
             {
-
+                string encryptedPIN = EncryptPIN(pin);
                 string query = "SELECT * FROM mahasiswa WHERE pin = @p1 and rfid = @p2";
                 SqlCommand command = new SqlCommand(query, _connection);
-                command.Parameters.AddWithValue("@p1", pin);
+                command.Parameters.AddWithValue("@p1", encryptedPIN);
                 command.Parameters.AddWithValue("@p2", rfid);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -161,7 +163,20 @@ namespace PRG_4_PROJEK.Models
             return mahasiswaModel;
         }
 
-        
+        private string EncryptPIN(string pin)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(pin));
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
 
         public void insertData(MahasiswaModel mahasiswaModel)
         {
@@ -172,7 +187,8 @@ namespace PRG_4_PROJEK.Models
                 command.Parameters.AddWithValue("@p1", mahasiswaModel.nim);
                 command.Parameters.AddWithValue("@p2", mahasiswaModel.nama);
                 command.Parameters.AddWithValue("@p3", mahasiswaModel.rfid);
-                command.Parameters.AddWithValue("@p4", mahasiswaModel.pin);
+                string encryptedPassword = EncryptPIN(mahasiswaModel.pin);
+                command.Parameters.AddWithValue("@p4", encryptedPassword);
                 command.Parameters.AddWithValue("@p5", mahasiswaModel.jk);
                 command.Parameters.AddWithValue("@p6", mahasiswaModel.jp);
                 command.Parameters.AddWithValue("@p7", mahasiswaModel.jm);
@@ -195,8 +211,8 @@ namespace PRG_4_PROJEK.Models
                 string query = "update mahasiswa " +
                 "set nama = @p2, " +
                 "rfid = @p3, " +
-                "jenis_kelamin = @p4, " +
-                "pin = @p5, " +
+                "pin = @p4, " +
+                 "jenis_kelamin = @p5, " +
                 "status = @p6 " +
                 "where nim = @p1";
 
@@ -204,8 +220,11 @@ namespace PRG_4_PROJEK.Models
                 command.Parameters.AddWithValue("@p1", mahasiswaModel.nim);
                 command.Parameters.AddWithValue("@p2", mahasiswaModel.nama);
                 command.Parameters.AddWithValue("@p3", mahasiswaModel.rfid);
-                command.Parameters.AddWithValue("@p4", mahasiswaModel.jk);
-                command.Parameters.AddWithValue("@p5", mahasiswaModel.pin);
+                
+                string encryptedPassword = EncryptPIN(mahasiswaModel.pin);
+                command.Parameters.AddWithValue("@p4", encryptedPassword);
+                command.Parameters.AddWithValue("@p5", mahasiswaModel.jk);
+               
                 command.Parameters.AddWithValue("@p6", mahasiswaModel.status);
                 _connection.Open();
                 command.ExecuteNonQuery();

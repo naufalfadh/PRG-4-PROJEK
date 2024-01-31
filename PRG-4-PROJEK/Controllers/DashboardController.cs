@@ -9,6 +9,7 @@ namespace PRG_4_PROJEK.Controllers
     {
         private readonly Karyawan _karyawanRepository;
 
+
         public DashboardController(IConfiguration configuration)
         {
             _karyawanRepository = new Karyawan(configuration);
@@ -16,6 +17,7 @@ namespace PRG_4_PROJEK.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.TotalKaryawan = _karyawanRepository.GetTotalKaryawan();
             KaryawanModel karyawanModel = new KaryawanModel();
 
             string serializedModel = HttpContext.Session.GetString("Identity");

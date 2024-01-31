@@ -4,12 +4,27 @@
     ViewData["Title"] = "Daftar Kegiatan";
     int no = 1;
 }
+<style>
+  
+    .card-text {
+        font-size: 40px;
+        color: black;
+    }
 
+    
+    .card-section2 {
+        width: 1600px;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        margin-left :40px;
+    }
+</style>
 
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card card-section2">
                 <div class="card-body">
                     <h5 class="card-title">Pendaftaran Kegiatan</h5>
                     <hr />
@@ -23,16 +38,17 @@
                             </div>
                         </div>
                     }
-@*                     <a class="btn btn-primary" asp-action="Create">Tambah(+)</a>
- *@                    <p></p>
-                    <table class="table datatable" id="myTable">
+                    <a class="btn btn-primary bi-plus float-end" asp-action="Create">Tambah(+)</a>
+                    <p></p>
+                    <table class="table datatable">
                         <thead>
                             <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">NIM</th>
-                                <th scope="col">Nama Kegiatan</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Aksi</th>
+                                <th scope="col"><strong>No</strong></th>
+                                <th scope="col"><strong>NIM</strong></th>
+                                <th scope="col"><strong>Nama Mahasiswa </strong></th>
+                                <th scope="col"><strong>Nama Kegiatan</strong></th>
+                                <th scope="col"><strong>Status</strong></th>
+                                <th scope="col"><strong>Aksi</strong></th>
                             </tr>
                         </thead>
                        <tbody>
@@ -88,15 +104,52 @@
     </div>
 
 </section>
+<br />
+<br />
+<br />
+<br />
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-section2">
+                <div class="card-body">
+                    <h5 class="card-title">Riwayat Pengajuan</h5>
+                    <hr />
+                 
+                    <p></p>
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th scope="col"><strong>No</strong></th>
+                                <th scope="col"><strong>Nama</strong></th>
+                                <th scope="col"><strong>Deskripsi</strong></th>
+                                <th scope="col"><strong>Jam Plus</strong></th>
+                                <th scope="col"><strong>Status</strong></th>
+                               
+                        </thead>
+                        <tbody>
+                            @foreach (var dkegiatan in Model)
+                            {
+                                <tr>
+                                    <td>@(no++)</td>
+                                   
+                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function () {
-        $('#myTable').DataTable();
-    });
-
+  
     $(document).ready(function () {
         $(".delete-button").click(function () {
             var akunId = $(this).data("id");

@@ -8,6 +8,7 @@ namespace PRG_4_PROJEK.Models
         public int id_kegiatan { get; set; }
         public string nim { get; set; }
         public string? deskripsi_penolakan { get; set; }
+        [Required(ErrorMessage = "Catatan Wajib Diisi")]
         public string? catatan { get; set; }
         public string status { get; set; }
     }

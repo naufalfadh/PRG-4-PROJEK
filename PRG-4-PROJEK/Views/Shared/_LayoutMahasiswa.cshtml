@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="~/content/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="~/content/vendors/base/vendor.bundle.base.css">
     <link rel="stylesheet" href="~/content/css/style.css">
+    <link href="~/content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <!-- endinject -->
     <link rel="shortcut icon" href="~/content/images/favicon.png" />
 
@@ -43,7 +44,7 @@
     </style>
 </head>
 
-<body style="background-color: lightgrey">
+<body style="background-color: #F7F7F9">
     <div class="horizontal-menu">
         <nav class="navbar top-navbar col-lg-12 col-12 p-0">
             <div class="container-fluid">
@@ -66,12 +67,19 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                                <a class="dropdown-item custom-logout-btn" href="@Url.Action("Logout", "Login")">
+                                <a class="dropdown-item" href="#" onclick="confirmLogout()">
                                     <i class="btn-icon bi bi-box-arrow-in-right"></i>
                                     Logout
                                 </a>
                             </div>
                         </li>
+                        <li class="nav-item dropdown d-lg-flex d-none">
+                            <a asp-controller="DashboardMahasiswa" asp-action="Index" class="nav-link collapsed">
+                                <span class="btn btn-inverse-primary btn-sm"><i class="fas fa-home"></i> Home</span>
+                            </a>
+                        </li>
+
+
                     </ul>
                     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
                             data-toggle="horizontal-menu-toggle">
@@ -108,7 +116,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to the logout action
-                    window.location.href = "@Url.Action("Logout", "Login")";
+                    window.location.href = "@Url.Action("Logout", "LoginMahasiswa")";
                 }
             });
         }

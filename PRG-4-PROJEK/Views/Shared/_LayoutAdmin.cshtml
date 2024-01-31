@@ -10,7 +10,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="~/content/assets/img/favicon.png" rel="icon">
+    <link href="~/content/images/favicon.png" rel="icon">
     <link href="~/content/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -89,7 +89,7 @@
         </a>
 
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-            <a class="dropdown-item custom-logout-btn" href="@Url.Action("Logout", "Login")">
+           <a class="dropdown-item" href="#" onclick="confirmLogout()">
                 <i class="btn-icon bi bi-box-arrow-in-right"></i>
                 Logout
             </a>
@@ -186,6 +186,23 @@
     <footer id="footer" class="footer">
        
     </footer><!-- End Footer -->
+     <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: 'Apakah Anda yakin ingin logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Logout!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "@Url.Action("Logout", "Login")";
+                }
+            });
+        }
+        </script>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -198,10 +215,11 @@
     <script src="content/assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="content/assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="content/assets/vendor/php-email-form/validate.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Template Main JS File -->
     <script src="content/assets/js/main.js"></script>
-
+     
 </body>
 
 </html>

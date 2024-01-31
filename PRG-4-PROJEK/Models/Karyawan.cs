@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace PRG_4_PROJEK.Models
 {
@@ -20,10 +22,11 @@ namespace PRG_4_PROJEK.Models
             KaryawanModel karyawanModel = new KaryawanModel();
             try
             {
+                string encryptedPassword = EncryptPassword(password);
                 string query = "SELECT * from karyawan where id_karyawan = @p1 AND password = @p2";
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", npk);
-                command.Parameters.AddWithValue("@p2", password);
+                command.Parameters.AddWithValue("@p2", encryptedPassword);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -84,7 +87,12 @@ namespace PRG_4_PROJEK.Models
             }
             return karyawanList;
         }
-
+        public int GetTotalKaryawan()
+        {
+            List<KaryawanModel> karyawanList = getAllData();
+            int totalKaryawan = karyawanList.Count;
+            return totalKaryawan;
+        }
         public KaryawanModel getData(string npk)
         {
             KaryawanModel karyawanModel = new KaryawanModel();
@@ -111,6 +119,20 @@ namespace PRG_4_PROJEK.Models
             }
             return karyawanModel;
         }
+        private string EncryptPassword(string password)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
 
         public void insertData(KaryawanModel karyawanModel)
         {
@@ -120,7 +142,8 @@ namespace PRG_4_PROJEK.Models
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", karyawanModel.npk);
                 command.Parameters.AddWithValue("@p2", karyawanModel.nama);
-                command.Parameters.AddWithValue("@p3", karyawanModel.password);
+                string encryptedPassword = EncryptPassword(karyawanModel.password);
+                command.Parameters.AddWithValue("@p3", encryptedPassword);
                 command.Parameters.AddWithValue("@p4", karyawanModel.jk);
                 command.Parameters.AddWithValue("@p5", karyawanModel.role);
                 command.Parameters.AddWithValue("@p6", karyawanModel.status);
@@ -149,7 +172,8 @@ namespace PRG_4_PROJEK.Models
                 using SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", karyawanModel.npk);
                 command.Parameters.AddWithValue("@p2", karyawanModel.nama);
-                command.Parameters.AddWithValue("@p3", karyawanModel.password);
+                string encryptedPassword = EncryptPassword(karyawanModel.password);
+                command.Parameters.AddWithValue("@p3", encryptedPassword);
                 command.Parameters.AddWithValue("@p4", karyawanModel.jk);
                 command.Parameters.AddWithValue("@p5", karyawanModel.role);
                 command.Parameters.AddWithValue("@p6", karyawanModel.status);

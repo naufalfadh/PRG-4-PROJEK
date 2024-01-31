@@ -3,7 +3,7 @@
 *@
 @model List<PRG_4_PROJEK.Models.DaftarKegiatanModel>
 @{
-    ViewData["Title"] = "Pengajuan Pendaftaran Kegiatan";
+    ViewData["Title"] = "Pengajuan Kegiatan";
     int no = 1;
 }
 
@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Kegiatan</h5>
+                    <h5 class="card-title">Pengajuan Kegiatan</h5>
                     <hr />
                     @if (TempData["SuccessMessage"] != null)
                     {
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     }
-                    @* <a class="btn btn-primary" asp-action="Create">Tambah Kegiatan</a> *@
+                 @*    <a class="btn btn-primary" asp-action="Create">Tambah</a> *@
                     <p></p>
                     <table class="table datatable" id="myTable">
                         <thead>
