@@ -32,6 +32,44 @@ namespace PRG_4_PROJEK.Controllers
             return View(_daftarkegiatanRepository.getAllData());
         }
 
+        public IActionResult IndexP()
+        {
+            ViewBag.kegiatanList = _daftarkegiatanRepository.getAllDatakegiatan();
+            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+
+            string serializedModel = HttpContext.Session.GetString("Identity");
+
+            if (serializedModel == null)
+            {
+                return RedirectToAction("Index", "LoginMahasiswa");
+            }
+            else
+            {
+                daftarkegiatanModel = JsonConvert.DeserializeObject<DaftarKegiatanModel>(serializedModel);
+            }
+
+            return View(_daftarkegiatanRepository.getAllDataP());
+        }
+
+        public IActionResult IndexJP()
+        {
+            ViewBag.kegiatanList = _daftarkegiatanRepository.getAllDatakegiatan();
+            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+
+            string serializedModel = HttpContext.Session.GetString("Identity");
+
+            if (serializedModel == null)
+            {
+                return RedirectToAction("Index", "LoginMahasiswa");
+            }
+            else
+            {
+                daftarkegiatanModel = JsonConvert.DeserializeObject<DaftarKegiatanModel>(serializedModel);
+            }
+
+            return View(_daftarkegiatanRepository.getAllDataJP());
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -103,6 +141,68 @@ namespace PRG_4_PROJEK.Controllers
                 else
                 {
                     response = new { success = false, message = "Kegiatan tidak ditemukan" };
+                }
+            }
+            catch (Exception ex)
+            {
+                response = new { success = false, message = ex.Message };
+            }
+
+            // Langsung redirect ke dashboard tanpa memeriksa role
+            return Json(response);
+        }
+
+        [HttpPost]
+        public IActionResult AccPend(int id)
+        {
+            // Membuat instance dari model KegiatanModel
+            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+
+
+
+            // Menghapus data berdasarkan ID
+            var response = new { success = false, message = "Gagal menghapus data." };
+            try
+            {
+                if (id != null)
+                {
+                    _daftarkegiatanRepository.AccPend(id);
+                    response = new { success = true, message = "Berhasil menerima pendaftaran data." };
+                }
+                else
+                {
+                    response = new { success = false, message = "pendaftaran tidak ditemukan" };
+                }
+            }
+            catch (Exception ex)
+            {
+                response = new { success = false, message = ex.Message };
+            }
+
+            // Langsung redirect ke dashboard tanpa memeriksa role
+            return Json(response);
+        }
+
+        [HttpPost]
+        public IActionResult PengajuanJP(int id)
+        {
+            // Membuat instance dari model KegiatanModel
+            DaftarKegiatanModel daftarkegiatanModel = new DaftarKegiatanModel();
+
+
+
+            // Menghapus data berdasarkan ID
+            var response = new { success = false, message = "Gagal menghapus data." };
+            try
+            {
+                if (id != null)
+                {
+                    _daftarkegiatanRepository.PengajuanJP(id);
+                    response = new { success = true, message = "Berhasil mengirim form pengajuan data." };
+                }
+                else
+                {
+                    response = new { success = false, message = "pengajuan tidak ditemukan" };
                 }
             }
             catch (Exception ex)

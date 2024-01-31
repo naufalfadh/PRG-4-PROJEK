@@ -20,6 +20,16 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Tambah Aktifitas</h4>
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="row">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle me-1"></i>
+                            <strong>Gagal!</strong> @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                }
                 <form class="row g-3" method="post">
                     <div class="form-group mb-3">
                         <label asp-for="nama">Pilih Mahasiswa <span style="color: red;">*</span></label>

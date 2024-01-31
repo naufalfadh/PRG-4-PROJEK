@@ -13,13 +13,10 @@
     <!-- base:css -->
     <link rel="stylesheet" href="~/content/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="~/content/vendors/base/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
     <link rel="stylesheet" href="~/content/css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="~/content/images/favicon.png" />
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -28,6 +25,9 @@
     <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.0/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css">
+
+
 
     <!--High CHart-->
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -39,12 +39,11 @@
         .logo-container {
             padding-left: 30px;
         }
-
-      
+       
     </style>
 </head>
 
-<body>
+<body style="background-color: lightgrey">
     <div class="horizontal-menu">
         <nav class="navbar top-navbar col-lg-12 col-12 p-0">
             <div class="container-fluid">
@@ -61,19 +60,17 @@
                                     <span class="btn btn-inverse-primary btn-sm">Pengajuan</span>
                                 </a>
                             </li>
-                        <li class="nav-item dropdown d-lg-flex d-none">
+                        <li class="nav-item dropdown ms-auto">
                             <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm" id="profileDropdown" href="#" data-bs-toggle="dropdown">
-                                @httpContext.Session.GetString("Nama") (@httpContext.Session.GetString("Role"))
-                                <span class="online-status"></span>
+                                Hai, <strong>@httpContext.Session.GetString("Nama") (@httpContext.Session.GetString("Role"))</strong>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                                <a class="dropdown-item" href="#" onclick="confirmLogout()">
-                                    <i class="mdi mdi-logout text-primary"></i>
+                                <a class="dropdown-item custom-logout-btn" href="@Url.Action("Logout", "Login")">
+                                    <i class="btn-icon bi bi-box-arrow-in-right"></i>
                                     Logout
                                 </a>
                             </div>
-                           
                         </li>
                     </ul>
                     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
@@ -111,7 +108,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to the logout action
-                    window.location.href = "@Url.Action("Logout", "DashboardUtama")";
+                    window.location.href = "@Url.Action("Logout", "Login")";
                 }
             });
         }

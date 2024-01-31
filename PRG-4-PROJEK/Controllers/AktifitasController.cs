@@ -54,9 +54,15 @@ namespace PRG_4_PROJEK.Controllers
         [HttpPost]
         public IActionResult Create(AktifitasModel aktifitasModel)
         {
+            Console.WriteLine(aktifitasModel.jp);
 
             if (ModelState.IsValid)
             {
+                if(aktifitasModel.jp != null && aktifitasModel.jm != null)
+                {
+                    TempData["ErrorMessage"] = "Pilih Salah Satu";
+                    return RedirectToAction("Create","Aktifitas");
+                }
                 _aktifitasRepository.insertData(aktifitasModel);
                 TempData["SuccessMessage"] = "Data berhasil ditambahkan";
                 return RedirectToAction("Index");

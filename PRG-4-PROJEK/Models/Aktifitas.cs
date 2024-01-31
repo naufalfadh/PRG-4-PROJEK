@@ -33,8 +33,8 @@ namespace PRG_4_PROJEK.Models
                         deskripsi = reader["deskripsi"].ToString(),
                         nim = reader["nim"].ToString(),
                         nama = reader["nama"].ToString(),
-                        jp = Convert.ToInt32(reader["jam_plus"]),
-                        jm = Convert.ToInt32(reader["jam_minus"]),
+                        jp = reader["jam_plus"] != DBNull.Value ? Convert.ToInt32(reader["jam_plus"]) : (int?)null,
+                        jm = reader["jam_minus"] != DBNull.Value ? Convert.ToInt32(reader["jam_minus"]) : (int?)null,
                     };
 
                     aktifitasList.Add(aktifitas);
@@ -44,7 +44,7 @@ namespace PRG_4_PROJEK.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("get all aktifitas : "+ex.Message);
             }
             return aktifitasList;
         }
@@ -78,6 +78,7 @@ namespace PRG_4_PROJEK.Models
         }
         public void insertData(AktifitasModel aktifitasModel)
         {
+            
             try
             {
                 string query = "INSERT INTO aktifitas VALUES(@deskripsi, @nim, @nama, @jp, @jm)";
@@ -93,6 +94,9 @@ namespace PRG_4_PROJEK.Models
                     command.ExecuteNonQuery();
                 }
 
+                Console.WriteLine("s"+aktifitasModel.jp);
+                Console.WriteLine(aktifitasModel.jm);
+
                 // Reset query variable
                 query = "";
 
@@ -100,8 +104,8 @@ namespace PRG_4_PROJEK.Models
                 if (aktifitasModel.jp != null)
                 {
                     query = "UPDATE mahasiswa SET jam_plus = jam_plus + @jam_plus WHERE nim = @nim";
-                }
-                else if (aktifitasModel.jm != null)
+                } 
+                else if(aktifitasModel.jm != null)
                 {
                     query = "UPDATE mahasiswa SET jam_minus = jam_minus + @jam_minus WHERE nim = @nim";
                 }
@@ -130,7 +134,7 @@ namespace PRG_4_PROJEK.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("insert aktifitas : "+ex.Message);
             }
         }
 
