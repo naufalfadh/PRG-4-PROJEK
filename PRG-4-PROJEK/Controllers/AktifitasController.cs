@@ -54,7 +54,7 @@ namespace PRG_4_PROJEK.Controllers
         [HttpPost]
         public IActionResult Create(AktifitasModel aktifitasModel)
         {
-            Console.WriteLine(aktifitasModel.jp);
+            Console.WriteLine("sssss :"+aktifitasModel.jp);
 
             if (ModelState.IsValid)
             {
@@ -67,6 +67,7 @@ namespace PRG_4_PROJEK.Controllers
                 TempData["SuccessMessage"] = "Data berhasil ditambahkan";
                 return RedirectToAction("Index");
             }
+            ViewBag.mahasiswaList = _aktifitasRepository.getAllDatamahasiswa();
             return View(aktifitasModel);
         }
 

@@ -10,6 +10,8 @@ namespace PRG_4_PROJEK.Controllers
 
         public KegiatanController(IConfiguration configuration)
         {
+
+
             _kegiatanRepository = new Kegiatan(configuration);
         }
 
@@ -133,6 +135,8 @@ namespace PRG_4_PROJEK.Controllers
             // Langsung redirect ke dashboard tanpa memeriksa role
             return Json(response);
         }
+
+
 
     }
 }

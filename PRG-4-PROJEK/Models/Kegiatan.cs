@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace PRG_4_PROJEK.Models
@@ -81,6 +82,12 @@ namespace PRG_4_PROJEK.Models
             return kegiatanModel;
         }
 
+        public int GetTotalKegiatan()
+        {
+            List<KegiatanModel> kegiatanList = getAllData();
+            int totalKegiatan = kegiatanList.Count;
+            return totalKegiatan;
+        }
         public void insertData(KegiatanModel kegiatanModel)
         {
             try
@@ -108,29 +115,38 @@ namespace PRG_4_PROJEK.Models
             {
                 string query = "update kegiatan " +
                 "set deskripsi = @p2, " +
-                "kapasitas = @p3 " +
-                "tgl_mulai = @p4 " +
-                "tgl_selesai = @p5 " +
+                "kapasitas = @p3, " +
+                "tgl_mulai = @p4, " +
+                "tgl_selesai = @p5, " +
                 "status = @p6 " +
                 "where id_kegiatan = @p1";
 
-                using SqlCommand command = new SqlCommand(query, _connection);
-                command.Parameters.AddWithValue("@p1", kegiatanModel.id_kegiatan);
-                command.Parameters.AddWithValue("@p2", kegiatanModel.deskripsi);
-                command.Parameters.AddWithValue("@p3", kegiatanModel.kapasitas);
-                command.Parameters.AddWithValue("@p3", kegiatanModel.tglmulai);
-                command.Parameters.AddWithValue("@p4", kegiatanModel.tglselesai);
-                command.Parameters.AddWithValue("@p5", kegiatanModel.status);
-                _connection.Open();
-                _connection.Open();
-                command.ExecuteNonQuery();
-                _connection.Close();
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@p1", kegiatanModel.id_kegiatan);
+                    command.Parameters.AddWithValue("@p2", kegiatanModel.deskripsi);
+                    command.Parameters.AddWithValue("@p3", kegiatanModel.kapasitas);
+                    command.Parameters.AddWithValue("@p4", kegiatanModel.tglmulai);
+                    command.Parameters.AddWithValue("@p5", kegiatanModel.tglselesai);
+                    command.Parameters.AddWithValue("@p6", kegiatanModel.status);
+
+                    _connection.Open();
+                    command.ExecuteNonQuery();
+                } // Koneksi ditutup otomatis ketika blok using selesai dieksekusi
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                if (_connection.State == ConnectionState.Open)
+                {
+                    _connection.Close(); // Pastikan koneksi ditutup di dalam blok finally
+                }
+            }
         }
+
 
         public void deleteData(int id)
         {
@@ -149,6 +165,41 @@ namespace PRG_4_PROJEK.Models
             }
         }
 
+        public List<KegiatanModel> getKegiatanByStatus(string status)
+        {
+            List<KegiatanModel> kegiatanList = new List<KegiatanModel>();
+            try
+            {
+                string query = "SELECT * FROM kegiatan WHERE status = @status";
+                using SqlCommand command = new SqlCommand(query, _connection);
+                command.Parameters.AddWithValue("@status", status);
+                _connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    KegiatanModel kegiatan = new KegiatanModel
+                    {
+                        id_kegiatan = Convert.ToInt32(reader["id_kegiatan"]),
+                        deskripsi = reader["deskripsi"].ToString(),
+                        kapasitas = Convert.ToInt32(reader["kapasitas"]),
+                        tglmulai = reader["tgl_mulai"] == DBNull.Value ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("tgl_mulai")),
+                        tglselesai = reader["tgl_selesai"] == DBNull.Value ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("tgl_selesai")),
+                        status = reader["status"].ToString(),
+                    };
+                    kegiatanList.Add(kegiatan);
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                _connection.Close();
+            }
+            return kegiatanList;
+        }
 
     } 
 }

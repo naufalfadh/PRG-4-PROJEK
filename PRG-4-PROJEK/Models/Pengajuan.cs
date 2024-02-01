@@ -15,13 +15,49 @@ namespace PRG_4_PROJEK.Models
             _connection = new SqlConnection(_connectionString);
         }
 
+
+        public int GetTotalPengajuan()
+        {
+            List<PengajuanModel> pengajuanList = getAllData();
+            int totalPengajuan = pengajuanList.Count;
+            return totalPengajuan;
+        }
+        public List<PengajuanModel> getAllData()
+        {
+            List<PengajuanModel> pengajuanList = new List<PengajuanModel>();
+            try
+            {
+                string query = "SELECT * from pengajuan";
+                SqlCommand command = new SqlCommand(query, _connection);
+                _connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    PengajuanModel pengajuan = new PengajuanModel
+                    {
+                        id_pengajuan = Convert.ToInt32(reader["id_pengajuan"]),
+                        
+                    };
+                    pengajuanList.Add(pengajuan);
+                }
+                reader.Close();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+            return pengajuanList;
+        }
         public PengajuanModel getData(int id_daftar_kegiatan)
         {
             PengajuanModel pengajuanModel = new PengajuanModel();
             try
             {
                 Console.WriteLine("id_pendaftaran : " + id_daftar_kegiatan);
-                string query = "SELECT * FROM pendaftaran JOIN kegiatan ON pendaftaran.id_kegiatan = kegiatan.id_kegiatan JOIN mahasiswa ON pendaftaran.nim = mahasiswa.nim";
+                string query = "SELECT * FROM pendaftaran JOIN kegiatan ON pendaftaran.id_kegiatan = kegiatan.id_kegiatan JOIN mahasiswa ON pendaftaran.nim = mahasiswa.nim where id_daftarkegiatan = "+id_daftar_kegiatan;
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", id_daftar_kegiatan);
                 _connection.Open();
@@ -45,7 +81,7 @@ namespace PRG_4_PROJEK.Models
             try
             {
 
-                string ppp = "SELECT id_kegiatan FROM pendaftaran WHERE id_daftarkegiatan = @p1";
+                string ppp = "SELECT id_daftarkegiatan FROM pendaftaran WHERE id_daftarkegiatan = @p1";
                 SqlCommand commands = new SqlCommand(ppp, _connection);
                 commands.Parameters.AddWithValue("@p1", pengajuanModel.id_daftarkegiatan);
                 _connection.Open();

@@ -136,7 +136,12 @@ namespace PRG_4_PROJEK.Models
             return mahasiswaList;
         }
 
-
+        public int GetTotalMahasiswa()
+        {
+            List<MahasiswaModel> mahasiswaList = getAllData();
+            int totalMahasiswa = mahasiswaList.Count;
+            return totalMahasiswa;
+        }
         public MahasiswaModel getData(string id)
         {
             MahasiswaModel mahasiswaModel = new MahasiswaModel();

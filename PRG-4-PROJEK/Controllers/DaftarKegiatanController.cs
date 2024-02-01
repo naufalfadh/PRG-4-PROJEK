@@ -111,7 +111,15 @@ namespace PRG_4_PROJEK.Controllers
         [HttpPost]
         public IActionResult Create(DaftarKegiatanModel daftarkegiatanModel)
         {
-         
+             ViewBag.kegiatanList = _daftarkegiatanRepository.getAllDatakegiatan();
+            if (_daftarkegiatanRepository.CheckIfAlreadyRegistered(daftarkegiatanModel.id_kegiatan))
+            {
+                ModelState.AddModelError("", "Kegiatan tersebut sudah terdaftar.");
+                TempData["ErrorMessage"] = "Kegiatan tersebut sudah terdaftar.";
+                return View("Create", daftarkegiatanModel);
+
+            }
+
             if (ModelState.IsValid)
             {
                 _daftarkegiatanRepository.insertData(daftarkegiatanModel);

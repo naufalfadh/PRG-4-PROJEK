@@ -7,9 +7,11 @@ namespace PRG_4_PROJEK.Controllers
     public class PengajuanController : Controller
     {
         private readonly Pengajuan _pengajuanRepository;
+        private readonly DaftarKegiatan _daftarkegiatanRepository;
 
         public PengajuanController(IConfiguration configuration)
         {
+            _daftarkegiatanRepository = new DaftarKegiatan(configuration);
             _pengajuanRepository = new Pengajuan(configuration);
         }
         public IActionResult Index()
@@ -20,6 +22,7 @@ namespace PRG_4_PROJEK.Controllers
         [HttpGet]
         public IActionResult AccJP(int id)
         {
+            ViewBag.kegiatanList = _daftarkegiatanRepository.getAllDatakegiatan();
             PengajuanModel pengajuanModel = _pengajuanRepository.getData(id);
             if (pengajuanModel == null)
             {

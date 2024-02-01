@@ -11,6 +11,7 @@ namespace PRG_4_PROJEK.Models
         [Required(ErrorMessage = "Catatan Wajib Diisi")]
         public string? catatan { get; set; }
         public string status { get; set; }
+        public int? kapasitas {  get; set; }
     }
  
 }

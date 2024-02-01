@@ -5,53 +5,66 @@
     ViewData["Title"] = "Daftar Kegiatan";
 }
 
- @{
-        var httpContext = ViewContext.HttpContext;
-    }
+@{
+    var httpContext = ViewContext.HttpContext;
+}
 
-<body>
-           <div class="col-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Daftar Kegiatan</h4>
+
+
+<body style="background-image: url('content/images/IMG_Background.jpg');">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Daftar Kegiatan</h4>
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <script>
+                        swal({
+                            title: "Gagal!",
+                            text: "@TempData["ErrorMessage"]",
+                            icon: "error",
+                            button: "OK",
+                        });
+                    </script>
+                }
+
                 <form class="forms-sample" method="post">
-                <div class="form-group mb-3">
-                    <label asp-for="nim">NIM <span style="color: red;">*</span></label>
-                    <input asp-for="nim" type="text" class="form-control input-with-border" placeholder="NIM" value="@httpContext.Session.GetString("Nim")" readonly>
-                    <span asp-validation-for="nim" class="text-danger"></span>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="nama">Nama</label>
-                    <input id="nama" type="text" class="form-control" value="@httpContext.Session.GetString("Nama")" readonly>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="jamminus">Jam Minus</label>
-                    <input id="jamminus" type="text" class="form-control" value="@httpContext.Session.GetString("JM")" readonly>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="jamplus">Jam Plus</label>
-                    <input id="jamplus" type="text" class="form-control" value="@httpContext.Session.GetString("JP")" readonly>
-                </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="id_kegiatan">Pilih Kegiatan <span style="color: red;">*</span></label>
-                        <select asp-for="id_kegiatan" asp-items='new SelectList(ViewBag.kegiatanList, "id_kegiatan", "deskripsi")' class="form-control">
-                            <option value="">Pilih Kegiatan</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="catatan">Catatan <span style="color: red;">*</span></label>
-                        <input asp-for="catatan" type="text" class="form-control input-with-border" placeholder="Masukkan Catatan Kegiatan">
-                        <span asp-validation-for="catatan" class="text-danger"></span>
-                    </div>
-                  
-                    <div class="form-group mb-3">
-                        <input asp-for="status" type="text" class="form-control input-with-border" placeholder="Status" value="Menunggu Persetujuan PIC" hidden>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="nim">NIM <span style="color: red;">*</span></label>
+                                <input asp-for="nim" type="text" class="form-control" placeholder="NIM" value="@httpContext.Session.GetString("Nim")" readonly>
+                                <span asp-validation-for="nim" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="id_kegiatan">Pilih Kegiatan <span style="color: red;">*</span></label>
+                                <select asp-for="id_kegiatan" asp-items='new SelectList(ViewBag.kegiatanList, "id_kegiatan", "deskripsi")' class="form-control">
+                                    <option value="">Pilih Kegiatan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="catatan">Catatan <span style="color: red;">*</span></label>
+                                <input asp-for="catatan" type="text" class="form-control" placeholder="Masukkan Catatan Kegiatan">
+                                <span asp-validation-for="catatan" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="jamminus">Jam Minus</label>
+                                <input id="jamminus" type="text" class="form-control" value="@httpContext.Session.GetString("JM")" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="jamplus">Jam Plus</label>
+                                <input id="jamplus" type="text" class="form-control" value="@httpContext.Session.GetString("JP")" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="status" hidden>Status</label>
+                                <input asp-for="status" type="text" class="form-control" placeholder="Status" value="Menunggu Persetujuan PIC" hidden>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary mr-2">Simpan</button>
-                            <a asp-controller="DaftarKegiatan" asp-action="Index" class="btn btn-light">Kembali</a>
-
+                    <a asp-controller="DaftarKegiatan" asp-action="Index" class="btn btn-light">Kembali</a>
                 </form>
             </div>
         </div>

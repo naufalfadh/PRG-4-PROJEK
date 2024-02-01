@@ -104,7 +104,7 @@
                                 <input asp-for="rfid" class="form-control" value="@httpContext.Session.GetString("Id")" hidden>
                             </div>
                             <div class="btn custom-btn custom-border-btn btn-naira btn-inverted">
-                                <input asp-for="pin" class="form-control form-control-lg border-left-0" type="pin" id="pinInput" placeholder="Masukkan PIN anda" required autofocus />
+                                <input asp-for="pin" class="form-control form-control-lg border-left-0" type="password" id="pinInput" placeholder="Masukkan PIN anda" required readonly autofocus />
                             </div>
                             <div class="input-group-append">
                                 <button type="button" class="btnn btn-secondary" onclick="appendDigit(1)">1</button>

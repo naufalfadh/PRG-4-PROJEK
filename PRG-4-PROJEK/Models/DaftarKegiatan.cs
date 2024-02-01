@@ -2,6 +2,7 @@
 using System;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
+using System.Data;
 
 namespace PRG_4_PROJEK.Models
 {
@@ -175,6 +176,8 @@ namespace PRG_4_PROJEK.Models
             return pengajuanModel;
         }
 
+
+
         public void insertData(DaftarKegiatanModel daftarkegiatanModel)
         {
             try
@@ -182,8 +185,8 @@ namespace PRG_4_PROJEK.Models
                 string query = "insert into pendaftaran values(@p1, @p2, @p3, @p4, @p5)";
                 SqlCommand command = new SqlCommand(query, _connection);
               
-                command.Parameters.AddWithValue("@p1", daftarkegiatanModel.id_kegiatan);
-                command.Parameters.AddWithValue("@p2", daftarkegiatanModel.nim);
+                command.Parameters.AddWithValue("@p1", daftarkegiatanModel.nim);
+                command.Parameters.AddWithValue("@p2", daftarkegiatanModel.id_kegiatan);
                 command.Parameters.AddWithValue("@p3", daftarkegiatanModel.deskripsi_penolakan ?? (object)DBNull.Value);
                 command.Parameters.AddWithValue("@p4", daftarkegiatanModel.catatan ?? (object)DBNull.Value);
                 command.Parameters.AddWithValue("@p5", daftarkegiatanModel.status);
@@ -201,7 +204,7 @@ namespace PRG_4_PROJEK.Models
         {
             try
             {
-                string query = "UPDATE pendaftaran SET status='Dibatalkan' id_daftarkegiatan = @p1";
+                string query = "UPDATE pendaftaran SET status='Dibatalkan' where id_daftarkegiatan = @p1";
                 using SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", id);
                 _connection.Open();
@@ -287,12 +290,13 @@ namespace PRG_4_PROJEK.Models
                 Console.WriteLine("pend : " + ex.Message);
             }
         }
+
         public List<KegiatanModel> getAllDatakegiatan()
         {
             List<KegiatanModel> kegiatanList = new List<KegiatanModel>();
             try
             {
-                string query = "SELECT * FROM kegiatan";
+                string query = "SELECT * FROM kegiatan WHERE status='Sedang Dikerjakan'";
                 SqlCommand command = new SqlCommand(query, _connection);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -302,6 +306,7 @@ namespace PRG_4_PROJEK.Models
                     {
                         id_kegiatan = Convert.ToInt32(reader["id_kegiatan"]),
                         deskripsi = reader["deskripsi"].ToString(),
+                        kapasitas = Convert.ToInt32(reader["kapasitas"].ToString()),
                     };
                     kegiatanList.Add(kegiatan);
                 }
@@ -352,5 +357,36 @@ namespace PRG_4_PROJEK.Models
             }
 
         }
-    } 
+
+        public bool CheckIfAlreadyRegistered(int id_kegiatan)
+        {
+            try
+            {
+                // Query untuk memeriksa apakah id_kegiatan sudah terdaftar sebelumnya
+                string query = "SELECT COUNT(*) FROM pendaftaran WHERE id_kegiatan = @id_kegiatan";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@id_kegiatan", id_kegiatan);
+                    _connection.Open();
+                    int count = (int)command.ExecuteScalar(); 
+
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false; 
+            }
+            finally
+            {
+                if (_connection.State == ConnectionState.Open)
+                {
+                    _connection.Close(); 
+                }
+            }
+        }
+
+    }
 }

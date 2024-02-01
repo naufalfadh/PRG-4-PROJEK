@@ -14,31 +14,40 @@
     
     .card-section2 {
         width: 1600px;
-        height: 200px;
         display: flex;
         justify-content: center;
         margin-left :40px;
     }
-</style>
 
+    .section {
+        background-image: url('content/images/IMG_Background.jpg');
+        background-size: 100%;
+    }
+</style>
+@{
+    var httpContext = ViewContext.HttpContext;
+}
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-section2">
                 <div class="card-body">
+                    <a class="btn btn-primary bi-plus float-end" asp-action="Create">Tambah(+)</a>
                     <h5 class="card-title">Pendaftaran Kegiatan</h5>
+                    
                     <hr />
                     @if (TempData["SuccessMessage"] != null)
                     {
-                        <div class="row">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <i class="bi bi-check-circle me-1"></i>
-                                <strong>Sukses!</strong> @TempData["SuccessMessage"]
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </div>
+                        <script>
+                            swal({
+                                title: "Sukses!",
+                                text: "@TempData["SuccessMessage"]",
+                                icon: "success",
+                                button: "OK",
+                            });
+                        </script>
                     }
-                    <a class="btn btn-primary bi-plus float-end" asp-action="Create">Tambah(+)</a>
+
                     <p></p>
                     <table class="table datatable">
                         <thead>
@@ -57,18 +66,37 @@
                                 <tr data-deskripsi-penolakan="@dkegiatan.deskripsi_penolakan">
                                     <td>@(no++)</td>
                                     <td>@dkegiatan.nim</td>
-                                    <td>@dkegiatan.id_kegiatan</td>
+                                    <td>@httpContext.Session.GetString("Nama").</td>
+                                    <td>
+                                        @foreach (var pp in ViewBag.kegiatanList)
+                                        {
+                                            @if (dkegiatan.id_kegiatan == @pp.id_kegiatan)
+                                            {
+                                                <span>@pp.deskripsi</span>
+                                            }
+                                        }
+                                    </td>
                                     <td>@dkegiatan.status</td>
                                     <td>
-                                        <button class="btn btn-sm btn-danger delete-button" data-id="@dkegiatan.id_daftarkegiatan">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger edit-button" data-id="@dkegiatan.id_daftarkegiatan">
-                                            <i class="fas fa-discord"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-success ulang-button" data-id="@dkegiatan.id_daftarkegiatan" data-kegiatan-id="@dkegiatan.id_kegiatan" data-kegiatan-tolak="@dkegiatan.deskripsi_penolakan">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        @if (dkegiatan.status == "Disetujui")
+                                        {
+                                            <button class="btn btn-sm btn-primary edit-button" data-id="@dkegiatan.id_daftarkegiatan">
+                                                <i class="fa-solid fa-arrow-up"></i>
+                                            </button>
+                                        }
+                                        else if (dkegiatan.status == "Ditolak")
+                                        {
+                                            <button class="btn btn-sm btn-warning ulang-button" data-id="@dkegiatan.id_daftarkegiatan" data-kegiatan-id="@dkegiatan.id_kegiatan" data-kegiatan-tolak="@dkegiatan.deskripsi_penolakan">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        }
+                                        else if (dkegiatan.status == "Menunggu Persetujuan PIC")
+                                        {
+                                            <button class="btn btn-sm btn-danger delete-button" data-id="@dkegiatan.id_daftarkegiatan">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+
 
                                     </td>
                                 </tr>
@@ -109,41 +137,7 @@
 <br />
 <br />
 
-<section class="section">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-section2">
-                <div class="card-body">
-                    <h5 class="card-title">Riwayat Pengajuan</h5>
-                    <hr />
-                 
-                    <p></p>
-                    <table class="table datatable">
-                        <thead>
-                            <tr>
-                                <th scope="col"><strong>No</strong></th>
-                                <th scope="col"><strong>Nama</strong></th>
-                                <th scope="col"><strong>Deskripsi</strong></th>
-                                <th scope="col"><strong>Jam Plus</strong></th>
-                                <th scope="col"><strong>Status</strong></th>
-                               
-                        </thead>
-                        <tbody>
-                            @foreach (var dkegiatan in Model)
-                            {
-                                <tr>
-                                    <td>@(no++)</td>
-                                   
-                                    
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -155,8 +149,8 @@
             var akunId = $(this).data("id");
 
             Swal.fire({
-                title: "Hapus Mahasiswa?",
-                text: "Apakah anda yakin ingin membatalkan pengajuan ini?",
+                title: "Batalkan Pendaftaran?",
+                text: "Apakah anda yakin ingin membatalkan pendaftaran ini?",
                 icon: "warning",
                 confirmButtonText: "Iya",
                 showDenyButton: true,

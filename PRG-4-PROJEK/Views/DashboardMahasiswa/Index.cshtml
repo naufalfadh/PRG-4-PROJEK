@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<PRG_4_PROJEK.Models.MahasiswaModel>
+@{
     Layout = "_LayoutMahasiswa";
     ViewData["Title"] = "Halaman";
     int no = 1;
@@ -30,6 +31,11 @@
         font-size: 5em;
         margin: 10px;
         padding: 40px;
+    }
+
+    body {
+        background-image: url('content/images/IMG_Background.jpg');
+        background-size: 100%;
     }
 </style>
 
@@ -135,10 +141,10 @@
                                     <td>@httpContext.Session.GetString("JP")</td>
                                     <td>@httpContext.Session.GetString("JM")</td>
                                     <td>
-                                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+
+                                        <a asp-controller="DashboardMahasiswa" asp-action="Detail" asp-route-id="@httpContext.Session.GetString("Nim")" class="btn btn-sm btn-primary">
                                             <i class="fas fa-info"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>

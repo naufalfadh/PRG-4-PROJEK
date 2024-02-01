@@ -43,18 +43,23 @@
                                 <tr>
                                     <td>@(no++)</td>
                                     <td>@dkegiatan.nim</td>
-                                    <td>@dkegiatan.id_kegiatan</td>
+                                    <td>
+                                        @foreach (var pp in ViewBag.kegiatanList)
+                                        {
+                                            @if (dkegiatan.id_kegiatan == @pp.id_kegiatan)
+                                            {
+                                                <span>@pp.deskripsi</span>
+                                            }
+                                        }
+                                    </td>
                                     <td>@dkegiatan.status</td>
                                     <td>
                                         <a asp-controller="Pengajuan" asp-action="AccJP" asp-route-id="@dkegiatan.id_daftarkegiatan" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fa-solid fa-check"></i>
                                         </a>
                                         <button class="btn btn-sm btn-success delete-button" data-id="@dkegiatan.id_daftarkegiatan" data-kegiatan-id="@dkegiatan.id_kegiatan">
-                                            <i class="fas fa-trash"></i>
+                                            <i class="fa-solid fa-xmark"></i>
                                         </button>
-                                        @*  <a asp-controller="DaftarKegiatan" asp-action="Edit" asp-route-id="@dkegiatan.id_daftarkegiatan" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-edit"></i>
-                                    </a> *@
 
                                     </td>
                                 </tr>

@@ -32,5 +32,18 @@ namespace PRG_4_PROJEK.Controllers
             return View(_mahasiswaRepository.getAllData());
         }
 
+        [HttpGet]
+        public ActionResult Detail(string id)
+        {
+            List<mhsLap> MahasiswaModel = _mahasiswaRepository.getDetail(id);
+            Console.WriteLine("jumlah : " + MahasiswaModel.Count);
+            Console.WriteLine("id : " + id);
+            if (MahasiswaModel == null)
+            {
+                return NotFound();
+            }
+            return View(MahasiswaModel);
+        }
+
     }
 }
